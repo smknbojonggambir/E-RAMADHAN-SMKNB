@@ -1,59 +1,156 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>E-RAMADHAN SMKNB</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-body{
-  font-family:Arial;
-  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  color:white;
-  text-align:center;
-  padding:20px;
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:'Segoe UI',sans-serif;
 }
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
+  color:white;
+}
+
+h2{
+  margin-bottom:20px;
+  text-align:center;
+}
+
+.container{
+  width:100%;
+  max-width:500px;
+}
+
 .card{
   background:white;
-  color:black;
-  padding:20px;
-  border-radius:15px;
-  width:350px;
-  margin:auto;
+  color:#333;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+  margin-bottom:20px;
+  transition:0.3s;
 }
-button{
-  padding:10px;
+
+.card:hover{
+  transform:translateY(-3px);
+}
+
+input, select{
   width:100%;
-  background:#203a43;
-  color:white;
+  padding:12px;
+  margin-bottom:15px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+
+button{
+  width:100%;
+  padding:12px;
   border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#203a43,#2c5364);
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  opacity:0.9;
+  transform:scale(1.02);
+}
+
+#dashboard{
+  width:100%;
+}
+
+canvas{
+  width:100% !important;
+}
+
+@media (max-width:480px){
+  .card{
+    padding:18px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<h2>🌙 E-RAMADHAN SMKNB</h2>
+<h2>🌙 E-RAMADHAN SMKNB 2026</h2>
 
-<div class="card" id="loginBox">
-<input id="u" placeholder="Username"><br><br>
-<input id="p" type="password" placeholder="Password"><br><br>
-<button onclick="login()">Login</button>
-</div>
+<div class="container">
 
-<div id="app" style="display:none;">
-<div class="card">
-<select id="puasa"><option>Ya</option><option>Tidak</option></select><br><br>
-<select id="shalat"><option>Lengkap</option><option>Tidak Lengkap</option></select><br><br>
-<select id="tarawih"><option>Ya</option><option>Tidak</option></select><br><br>
-<select id="tadarus"><option>Ya</option><option>Tidak</option></select><br><br>
-<select id="sedekah"><option>Ya</option><option>Tidak</option></select><br><br>
-<button onclick="simpan()">Simpan</button>
-</div>
+  <!-- LOGIN -->
+  <div class="card" id="loginBox">
+    <h3 style="margin-bottom:15px;text-align:center;">Login Siswa</h3>
+    <input id="u" placeholder="Username">
+    <input id="p" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
 
-<div class="card" id="dashboard" style="display:none;">
-<h3>Ranking</h3>
-<canvas id="chart"></canvas>
-</div>
+  <!-- APP -->
+  <div id="app" style="display:none;">
+
+    <div class="card">
+      <h3 style="margin-bottom:15px;">Laporan Ibadah</h3>
+
+      <label>Puasa</label>
+      <select id="puasa">
+        <option>Ya</option>
+        <option>Tidak</option>
+      </select>
+
+      <label>Shalat 5 Waktu</label>
+      <select id="shalat">
+        <option>Lengkap</option>
+        <option>Tidak Lengkap</option>
+      </select>
+
+      <label>Tarawih</label>
+      <select id="tarawih">
+        <option>Ya</option>
+        <option>Tidak</option>
+      </select>
+
+      <label>Tadarus</label>
+      <select id="tadarus">
+        <option>Ya</option>
+        <option>Tidak</option>
+      </select>
+
+      <label>Sedekah</label>
+      <select id="sedekah">
+        <option>Ya</option>
+        <option>Tidak</option>
+      </select>
+
+      <button onclick="simpan()">Simpan Laporan</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="card" id="dashboard" style="display:none;">
+      <h3 style="margin-bottom:15px;text-align:center;">Ranking Siswa</h3>
+      <canvas id="chart"></canvas>
+    </div>
+
+  </div>
+
 </div>
 
 <script>
@@ -62,31 +159,43 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyYgJF67S1ybqjiUqDC44Ao
 let user={};
 
 async function login(){
-  const res = await fetch(API_URL,{
-    method:"POST",
-    body:JSON.stringify({
-      action:"login",
-      username:u.value,
-      password:p.value
-    })
-  });
+  try{
+    const res = await fetch(API_URL,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({
+        action:"login",
+        username:document.getElementById("u").value,
+        password:document.getElementById("p").value
+      })
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if(data.status){
-    user=data;
-    loginBox.style.display="none";
-    app.style.display="block";
-    if(data.role=="admin") loadChart();
-  } else alert("Login gagal");
+    if(data.status){
+      user=data;
+      document.getElementById("loginBox").style.display="none";
+      document.getElementById("app").style.display="block";
+      if(data.role=="admin"){
+        document.getElementById("dashboard").style.display="block";
+        loadChart();
+      }
+    } else {
+      alert("Login gagal");
+    }
+
+  } catch(err){
+    alert("Server tidak merespon");
+  }
 }
 
 async function simpan(){
   await fetch(API_URL,{
     method:"POST",
+    headers:{ "Content-Type":"application/json" },
     body:JSON.stringify({
       action:"simpan",
-      username:user.nama,
+      username:user.username,
       nama:user.nama,
       kelas:user.kelas,
       puasa:puasa.value,
@@ -96,12 +205,14 @@ async function simpan(){
       sedekah:sedekah.value
     })
   });
-  alert("Berhasil disimpan");
+
+  alert("Laporan berhasil disimpan");
 }
 
 async function loadChart(){
   const res = await fetch(API_URL,{
     method:"POST",
+    headers:{ "Content-Type":"application/json" },
     body:JSON.stringify({action:"ranking"})
   });
 
@@ -111,7 +222,16 @@ async function loadChart(){
     type:"bar",
     data:{
       labels:Object.keys(data),
-      datasets:[{data:Object.values(data)}]
+      datasets:[{
+        label:"Total Poin",
+        data:Object.values(data)
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:false}
+      }
     }
   });
 }
