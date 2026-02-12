@@ -6,386 +6,285 @@
 <title>E-RAMADHAN SMKNB</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --primary: #065f46; /* Hijau Tua Mewah */
-    --primary-light: #059669; /* Hijau Terang */
-    --accent: #f59e0b; /* Emas */
-    --bg-color: #f0fdf4; /* Background kehijauan sangat muda */
-    --card-bg: #ffffff;
-    --text-dark: #1f2937;
-    --text-light: #6b7280;
-  }
-
-  body { 
-    font-family: 'Poppins', sans-serif; 
-    background: var(--bg-color); 
-    margin: 0; 
-    padding: 0; 
-    color: var(--text-dark); 
-    padding-bottom: 40px;
-  }
-
-  /* --- HEADER DENGAN LOGO --- */
-  .header-container {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    color: white;
-    padding: 30px 20px 50px; /* Padding bawah lebih besar untuk efek melengkung */
-    text-align: center;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-    box-shadow: 0 10px 20px rgba(6, 95, 70, 0.2);
-    position: relative;
-    z-index: 1;
-  }
-
-  .logo-img {
-    width: 90px;
-    height: 90px;
-    object-fit: contain;
-    background: white;
-    border-radius: 50%;
-    padding: 5px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    margin-bottom: 10px;
-  }
-
-  .header-container h1 { margin: 5px 0 0; font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; }
-  .header-container p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.9; font-weight: 300; }
-
-  /* --- KARTU UTAMA --- */
-  .main-wrapper {
-    max-width: 500px;
-    margin: -40px auto 0; /* Menarik ke atas menutupi header */
-    padding: 0 15px;
-    position: relative;
-    z-index: 2;
-  }
-
-  .card { 
-    background: var(--card-bg); 
-    padding: 25px; 
-    border-radius: 20px; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
-    margin-bottom: 20px;
-    animation: fadeUp 0.6s ease-out;
-  }
-
-  /* --- INPUT STYLES --- */
-  label { font-weight: 600; font-size: 0.9rem; display: block; margin-top: 15px; margin-bottom: 8px; color: var(--primary); }
+  :root { --primary: #065f46; --primary-light: #059669; --accent: #f59e0b; --bg: #f0fdf4; --card: #fff; }
+  body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 0; color: #1f2937; padding-bottom: 50px; }
   
-  select, input[type="text"], input[type="file"] { 
-    width: 100%; 
-    padding: 14px; 
-    border: 1px solid #e5e7eb; 
-    border-radius: 12px; 
-    box-sizing: border-box; 
-    font-size: 0.95rem; 
-    background: #f9fafb;
-    transition: all 0.3s;
-    font-family: inherit;
-    outline: none;
-  }
+  /* HEADER */
+  .header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 30px 20px 40px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 4px 20px rgba(6,95,70,0.2); }
+  .logo { width: 80px; height: 80px; background: white; border-radius: 50%; padding: 5px; margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); object-fit: contain; }
   
-  select:focus, input:focus { 
-    border-color: var(--primary-light); 
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); 
-  }
-
-  /* --- ACTIVITY GROUP --- */
-  .act-group { 
-    border: 1px solid #f3f4f6; 
-    padding: 15px; 
-    border-radius: 15px; 
-    margin-top: 15px; 
-    background: #ffffff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-    border-left: 5px solid var(--accent); /* Aksen Emas di kiri */
-  }
+  /* CONTAINER */
+  .container { max-width: 500px; margin: -30px auto 0; padding: 0 15px; position: relative; z-index: 2; }
+  .card { background: var(--card); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 15px; animation: fadeUp 0.5s ease-out; }
   
-  .act-title { 
-    font-weight: 700; 
-    color: var(--text-dark); 
-    margin-bottom: 10px; 
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-  }
+  /* FORM ELEMENTS */
+  label { font-weight: 600; font-size: 0.9rem; display: block; margin: 10px 0 5px; color: var(--primary); }
+  select, input, button { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #e5e7eb; margin-bottom: 10px; box-sizing: border-box; font-family: inherit; }
+  button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(6,95,70,0.3); }
+  button:disabled { background: #ccc; }
+  .act-group { border: 1px solid #f3f4f6; padding: 15px; border-radius: 12px; background: #fff; margin-bottom: 15px; border-left: 4px solid var(--accent); }
 
-  /* --- TOMBOL --- */
-  button { 
-    width: 100%; 
-    padding: 16px; 
-    background: linear-gradient(to right, var(--primary), var(--primary-light)); 
-    color: white; 
-    border: none; 
-    border-radius: 50px; 
-    font-weight: 700; 
-    font-size: 1rem; 
-    margin-top: 25px; 
-    cursor: pointer; 
-    box-shadow: 0 5px 15px rgba(6, 95, 70, 0.3);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  button:active { transform: scale(0.98); }
-  button:disabled { background: #d1d5db; cursor: not-allowed; box-shadow: none; }
-
-  /* --- UTILS --- */
+  /* ADMIN STYLES */
+  .admin-badge { background: #fef3c7; color: #d97706; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; font-weight: bold; }
+  .row-data { padding: 12px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+  .row-data:hover { background: #f9fafb; }
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; justify-content: center; align-items: center; padding: 20px; }
+  .modal-content { background: white; width: 100%; max-width: 400px; max-height: 80vh; overflow-y: auto; border-radius: 15px; padding: 20px; position: relative; }
+  
   .hidden { display: none; }
-  hr { border: 0; border-top: 1px dashed #d1d5db; margin: 25px 0; }
-  
-  /* Upload Area */
-  input[type="file"] {
-    background: #ecfdf5;
-    border: 2px dashed #10b981;
-    color: var(--primary);
-  }
-
-  /* Loading Animation */
-  #loading { display: none; text-align: center; margin-top: 15px; color: var(--primary); font-weight: 600; }
-  
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .footer { text-align: center; font-size: 0.8rem; color: #9ca3af; margin-top: 30px; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 </style>
 </head>
 <body>
 
-<div class="header-container">
-  <img src="https://raw.githubusercontent.com/smknbojonggambir/E-RAMADHAN-SMKNB/main/LOGO.png" alt="Logo Sekolah" class="logo-img">
-  <h1>E-RAMADHAN SMKNB</h1>
-  <p>Laporan Ibadah Harian Siswa</p>
+<div class="header">
+  <img src="https://raw.githubusercontent.com/smknbojonggambir/E-RAMADHAN-SMKNB/main/LOGO.png" class="logo">
+  <h2 style="margin:0;">E-RAMADHAN SMKNB</h2>
+  <p style="margin:5px 0 0; font-size:0.9rem; opacity:0.9;">Laporan Ibadah & Monitoring Guru</p>
 </div>
 
-<div class="main-wrapper">
-  <div class="card">
-    <div style="text-align: center; margin-bottom: 20px;">
-      <h3 style="margin:0; color:var(--primary);">📋 Form Laporan</h3>
-      <small style="color:var(--text-light);">Isi data dengan jujur dan benar</small>
-    </div>
-    
-    <label>Pilih Kelas</label>
-    <select id="pilihKelas" onchange="loadNama()">
-      <option value="">-- Sedang Memuat Data... --</option>
-    </select>
-
-    <div id="boxNama" class="hidden">
-      <label>Pilih Nama Kamu</label>
-      <select id="pilihNama">
-        <option value="">-- Pilih Nama --</option>
-      </select>
+<div class="container">
+  
+  <div id="panel-siswa">
+    <div class="card">
+      <h3 style="text-align:center; color:var(--primary); margin-top:0;">📋 Form Siswa</h3>
+      <label>Kelas</label><select id="pKelas" onchange="loadNama()"><option>Loading...</option></select>
+      <div id="areaNama" class="hidden">
+        <label>Nama Siswa</label><select id="pNama"><option>Pilih Nama</option></select>
+        <button onclick="bukaForm()" style="margin-top:10px;">MULAI ISI LAPORAN</button>
+      </div>
     </div>
 
     <div id="formIbadah" class="hidden">
-      <hr>
-      
-      <div class="act-group">
-        <div class="act-title">1. Puasa Hari Ini?</div>
-        <select id="puasa">
-          <option value="Ya">✅ Ya, Puasa Penuh</option>
-          <option value="Setengah">🌗 Setengah Hari</option>
-          <option value="Tidak">❌ Tidak / Berhalangan</option>
-        </select>
-        <input type="text" id="ket_puasa" placeholder="Alasan (Jika tidak puasa)...">
-      </div>
-
-      <div class="act-group">
-        <div class="act-title">2. Shalat Wajib (5 Waktu)?</div>
-        <select id="shalat">
-          <option value="Ya">✅ Lengkap 5 Waktu</option>
-          <option value="Bolong">⚠️ Ada yang bolong</option>
-          <option value="Tidak">❌ Tidak Shalat</option>
-        </select>
-        <input type="text" id="ket_shalat" placeholder="Shalat apa yang tertinggal?">
-      </div>
-
-      <div class="act-group">
-        <div class="act-title">3. Shalat Tarawih?</div>
-        <select id="tarawih">
-          <option value="Ya">✅ Ya, Melaksanakan</option>
-          <option value="Tidak">❌ Tidak</option>
-        </select>
-        <input type="text" id="ket_tarawih" placeholder="Dimana? (Masjid/Rumah)">
-      </div>
-
-      <div class="act-group">
-        <div class="act-title">4. Tadarus Al-Quran?</div>
-        <select id="tadarus">
-          <option value="Ya">✅ Ya, Mengaji</option>
-          <option value="Tidak">❌ Tidak</option>
-        </select>
-        <input type="text" id="ket_tadarus" placeholder="Surat apa / Juz berapa?">
-      </div>
-
-      <div class="act-group">
-        <div class="act-title">5. Bersedekah / Infak?</div>
-        <select id="sedekah">
-          <option value="Ya">✅ Ya, Bersedekah</option>
-          <option value="Tidak">❌ Tidak</option>
-        </select>
-        <input type="text" id="ket_sedekah" placeholder="Bentuk sedekah?">
-      </div>
-
-      <div class="act-group" style="border-left-color: var(--primary);">
-        <label style="margin-top:0;">📸 Foto Dokumentasi Kegiatan</label>
-        <p style="font-size:0.8rem; color:#666; margin:0 0 10px;">Upload 1 foto bukti kegiatan hari ini.</p>
-        <input type="file" id="fotoInput" accept="image/*" capture="environment">
-      </div>
-
-      <button onclick="kirim()" id="btnKirim">🚀 KIRIM LAPORAN</button>
-      
-      <div id="loading">
-        <span style="font-size: 1.5rem;">⏳</span><br>
-        Sedang mengirim data...<br>
-        <small>Mohon jangan tutup halaman ini.</small>
+      <div class="card">
+        <div class="act-group"><b>1. Puasa?</b><select id="puasa"><option value="Ya">✅ Ya Full</option><option value="Setengah">🌗 Setengah</option><option value="Tidak">❌ Tidak</option></select><input id="k_puasa" placeholder="Ket..."></div>
+        <div class="act-group"><b>2. Shalat Wajib?</b><select id="shalat"><option value="Ya">✅ Lengkap</option><option value="Bolong">⚠️ Bolong</option><option value="Tidak">❌ Tidak</option></select><input id="k_shalat" placeholder="Ket..."></div>
+        <div class="act-group"><b>3. Tarawih?</b><select id="tarawih"><option value="Ya">✅ Ya</option><option value="Tidak">❌ Tidak</option></select><input id="k_tarawih" placeholder="Ket..."></div>
+        <div class="act-group"><b>4. Tadarus?</b><select id="tadarus"><option value="Ya">✅ Ya</option><option value="Tidak">❌ Tidak</option></select><input id="k_tadarus" placeholder="Ket..."></div>
+        <div class="act-group"><b>5. Sedekah?</b><select id="sedekah"><option value="Ya">✅ Ya</option><option value="Tidak">❌ Tidak</option></select><input id="k_sedekah" placeholder="Ket..."></div>
+        <div class="act-group"><b>📸 Foto Bukti</b><input type="file" id="foto" accept="image/*" capture="environment"></div>
+        <button onclick="kirim()" id="btnKirim">🚀 KIRIM LAPORAN</button>
       </div>
     </div>
   </div>
-  
-  <div class="footer">
-    &copy; 2026 E-RAMADHAN SMKNB
+
+  <div id="panel-login-admin" class="hidden">
+    <div class="card" style="text-align:center;">
+      <h3>🔐 Login Guru</h3>
+      <input type="password" id="adminPass" placeholder="Masukkan Password Guru">
+      <button onclick="loginAdmin()">MASUK</button>
+      <button onclick="modeSiswa()" style="background:#ddd; color:#333; margin-top:5px;">Kembali ke Siswa</button>
+    </div>
+  </div>
+
+  <div id="dashboard-admin" class="hidden">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0;">👨‍🏫 Dashboard</h3>
+        <button onclick="location.reload()" style="width:auto; padding:5px 10px; font-size:0.8rem; background:#ef4444;">Logout</button>
+      </div>
+      <hr>
+      <label>Tanggal Laporan:</label>
+      <input type="date" id="admDate" onchange="loadRekap()">
+      <label>Filter Kelas:</label>
+      <select id="admKelas" onchange="loadRekap()">
+        <option value="Semua">Semua Kelas</option>
+      </select>
+      <div style="background:#e0f2f1; padding:10px; border-radius:8px; font-size:0.9rem; margin-bottom:10px;">
+        Total Lapor: <b id="totalLapor">0</b> Siswa
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;">
+      <div id="list-rekap">
+        <div style="padding:20px; text-align:center; color:#999;">Pilih Tanggal untuk melihat data.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:30px;">
+    <span onclick="modeAdmin()" style="font-size:0.8rem; color:#ccc; cursor:pointer;">Login Guru / Admin</span>
+  </div>
+
+</div>
+
+<div id="modalDetail" class="modal">
+  <div class="modal-content">
+    <h3 id="mNama" style="margin-top:0; color:var(--primary);">Nama Siswa</h3>
+    <p id="mKelas" style="color:#666; margin-bottom:15px;"></p>
+    <div id="mBody"></div>
+    <div style="margin-top:15px; text-align:right;">
+      <a id="mFoto" href="#" target="_blank" style="text-decoration:none; color:white; background:#f59e0b; padding:8px 15px; border-radius:20px; font-size:0.9rem;">📸 Lihat Foto</a>
+      <button onclick="document.getElementById('modalDetail').style.display='none'" style="width:auto; margin-left:10px; background:#ddd; color:#333;">Tutup</button>
+    </div>
   </div>
 </div>
 
 <script>
-// URL SCRIPT ANDA (Sesuai yang Anda berikan)
-const API_URL = "https://script.google.com/macros/s/AKfycbwR3teEkRtlaNypd2FQecbLrv6Axx0lTXDDPKiDwyF5YUSpXCet6bUrt_EbKxl1ZCo-Cg/exec"; 
+// ==========================================
+// PASTE URL DEPLOYMENT DISINI
+// ==========================================
+const API = "URL_WEB_APP_ANDA_DISINI"; 
 
-let DATA_SISWA = {}; // Menyimpan data lokal
+let DATA_SISWA = {};
 
-// Load Data saat web dibuka
+// === INIT ===
 window.onload = function() {
-  fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify({ action: "get_siswa" })
-  })
-  .then(res => res.json())
-  .then(res => {
+  // Set tanggal hari ini default untuk admin
+  document.getElementById('admDate').valueAsDate = new Date();
+  
+  // Load Data Siswa
+  fetch(API, {method: "POST", body: JSON.stringify({action: "get_siswa"})})
+  .then(r=>r.json()).then(res => {
     if(res.status) {
       DATA_SISWA = res.data;
-      const selKelas = document.getElementById('pilihKelas');
-      selKelas.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+      const s = document.getElementById('pKelas');
+      const sAdm = document.getElementById('admKelas');
+      s.innerHTML = '<option value="">-- Pilih Kelas --</option>';
       Object.keys(DATA_SISWA).sort().forEach(k => {
-        selKelas.innerHTML += `<option value="${k}">${k}</option>`;
+        s.innerHTML += `<option value="${k}">${k}</option>`;
+        sAdm.innerHTML += `<option value="${k}">${k}</option>`;
       });
-    } else { 
-      document.getElementById('pilihKelas').innerHTML = '<option value="">Gagal Memuat Data</option>';
-      alert("Gagal koneksi ke database."); 
     }
-  })
-  .catch(e => {
-     document.getElementById('pilihKelas').innerHTML = '<option value="">Gagal Koneksi</option>';
   });
-};
+}
 
-// Saat Kelas Dipilih -> Munculkan Nama
+// === MODE SWITCHING ===
+function modeAdmin() {
+  document.getElementById('panel-siswa').classList.add('hidden');
+  document.getElementById('panel-login-admin').classList.remove('hidden');
+}
+function modeSiswa() {
+  document.getElementById('panel-login-admin').classList.add('hidden');
+  document.getElementById('panel-siswa').classList.remove('hidden');
+}
+
+// === SISWA LOGIC ===
 function loadNama() {
-  const k = document.getElementById('pilihKelas').value;
-  const selNama = document.getElementById('pilihNama');
-  
-  if (k && DATA_SISWA[k]) {
-    selNama.innerHTML = '<option value="">-- Pilih Nama --</option>';
-    // Sort nama siswa sesuai abjad
-    DATA_SISWA[k].sort((a,b) => a.nama.localeCompare(b.nama)).forEach(s => {
-      selNama.innerHTML += `<option value="${s.user}" data-nama="${s.nama}">${s.nama}</option>`;
+  const k = document.getElementById('pKelas').value;
+  const n = document.getElementById('pNama');
+  if(k && DATA_SISWA[k]) {
+    n.innerHTML = '<option>-- Pilih Nama --</option>';
+    DATA_SISWA[k].sort((a,b)=>a.nama.localeCompare(b.nama)).forEach(x => {
+      n.innerHTML += `<option value="${x.user}" data-n="${x.nama}">${x.nama}</option>`;
     });
-    
-    // Efek smooth muncul
-    const boxNama = document.getElementById('boxNama');
-    const formIbadah = document.getElementById('formIbadah');
-    
-    boxNama.classList.remove('hidden');
-    boxNama.style.animation = "fadeUp 0.5s";
-    formIbadah.classList.remove('hidden');
-    formIbadah.style.animation = "fadeUp 0.7s";
-    
-  } else {
-    document.getElementById('boxNama').classList.add('hidden');
-    document.getElementById('formIbadah').classList.add('hidden');
+    document.getElementById('areaNama').classList.remove('hidden');
+  }
+}
+function bukaForm(){ document.getElementById('formIbadah').classList.remove('hidden'); }
+
+async function kirim() {
+  const f = document.getElementById('foto');
+  if(f.files.length === 0) return alert("Wajib foto!");
+  if(!confirm("Kirim Laporan?")) return;
+  
+  const btn = document.getElementById('btnKirim');
+  btn.innerText = "Mengirim..."; btn.disabled = true;
+
+  let lat='-', long='-';
+  try { const pos = await new Promise((r,j)=>navigator.geolocation.getCurrentPosition(r,j,{timeout:3000})); lat=pos.coords.latitude; long=pos.coords.longitude; } catch(e){}
+
+  const r = new FileReader();
+  r.readAsDataURL(f.files[0]);
+  r.onload = async function() {
+    const d = {
+      action:'simpan',
+      username: document.getElementById('pNama').value,
+      nama: document.querySelector('#pNama option:checked').getAttribute('data-n'),
+      kelas: document.getElementById('pKelas').value,
+      foto: r.result, lat, long,
+      puasa: document.getElementById('puasa').value, ket_puasa: document.getElementById('k_puasa').value,
+      shalat: document.getElementById('shalat').value, ket_shalat: document.getElementById('k_shalat').value,
+      tarawih: document.getElementById('tarawih').value, ket_tarawih: document.getElementById('k_tarawih').value,
+      tadarus: document.getElementById('tadarus').value, ket_tadarus: document.getElementById('k_tadarus').value,
+      sedekah: document.getElementById('sedekah').value, ket_sedekah: document.getElementById('k_sedekah').value,
+    };
+    const req = await fetch(API, {method:'POST', body:JSON.stringify(d)});
+    const res = await req.json();
+    if(res.status) { alert("Berhasil! Poin: "+res.poin); location.reload(); }
+    else { alert("Gagal"); btn.disabled=false; btn.innerText="Kirim Ulang"; }
   }
 }
 
-async function kirim() {
-  const username = document.getElementById('pilihNama').value;
-  const namaOption = document.querySelector('#pilihNama option:checked');
-  const nama = namaOption ? namaOption.getAttribute('data-nama') : "";
-  const kelas = document.getElementById('pilihKelas').value;
+// === ADMIN LOGIC ===
+async function loginAdmin() {
+  const p = document.getElementById('adminPass').value;
+  const btn = document.querySelector('#panel-login-admin button');
+  btn.innerText = "Cek...";
+  const r = await fetch(API, {method:'POST', body:JSON.stringify({action:'login_admin', pass:p})});
+  const res = await r.json();
   
-  const fotoInp = document.getElementById('fotoInput');
-  
-  if (!username || !kelas) return alert("⚠️ Mohon pilih Nama dan Kelas terlebih dahulu!");
-  if (fotoInp.files.length === 0) return alert("⚠️ Wajib upload foto bukti kegiatan!");
-
-  if (!confirm("Apakah data yang Anda isi sudah benar & jujur?")) return;
-
-  document.getElementById('btnKirim').disabled = true;
-  document.getElementById('btnKirim').innerText = "Mengirim...";
-  document.getElementById('loading').style.display = 'block';
-
-  // 1. Ambil GPS
-  let lat = '', long = '';
-  try {
-    const pos = await new Promise((res, rej) => 
-      navigator.geolocation.getCurrentPosition(res, rej, {timeout: 4000})
-    );
-    lat = pos.coords.latitude; 
-    long = pos.coords.longitude;
-  } catch(e) { console.log("GPS Timeout/Denied"); }
-
-  // 2. Proses Foto
-  const reader = new FileReader();
-  reader.readAsDataURL(fotoInp.files[0]);
-  
-  reader.onload = async function() {
-    const base64 = reader.result;
-
-    const payload = {
-      action: "simpan",
-      username: username,
-      nama: nama,
-      kelas: kelas,
-      lat: lat, long: long,
-      foto: base64,
-      
-      // Data Ibadah
-      puasa: document.getElementById('puasa').value,
-      ket_puasa: document.getElementById('ket_puasa').value,
-      shalat: document.getElementById('shalat').value,
-      ket_shalat: document.getElementById('ket_shalat').value,
-      tarawih: document.getElementById('tarawih').value,
-      ket_tarawih: document.getElementById('ket_tarawih').value,
-      tadarus: document.getElementById('tadarus').value,
-      ket_tadarus: document.getElementById('ket_tadarus').value,
-      sedekah: document.getElementById('sedekah').value,
-      ket_sedekah: document.getElementById('ket_sedekah').value
-    };
-
-    try {
-      const req = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
-      const res = await req.json();
-      if(res.status) {
-        alert("✅ Alhamdulillah, Laporan Berhasil Terkirim!\nPoin kamu: " + res.poin);
-        location.reload();
-      } else {
-        alert("❌ Gagal mengirim: " + res.message);
-        resetBtn();
-      }
-    } catch(e) {
-      alert("❌ Gagal Koneksi internet. Coba lagi.");
-      resetBtn();
-    }
-  };
+  if(res.status) {
+    document.getElementById('panel-login-admin').classList.add('hidden');
+    document.getElementById('dashboard-admin').classList.remove('hidden');
+    loadRekap();
+  } else {
+    alert("Password Salah!");
+    btn.innerText = "MASUK";
+  }
 }
 
-function resetBtn() {
-  document.getElementById('btnKirim').disabled = false;
-  document.getElementById('btnKirim').innerText = "🚀 KIRIM LAPORAN";
-  document.getElementById('loading').style.display = 'none';
+async function loadRekap() {
+  const tgl = document.getElementById('admDate').value;
+  const kls = document.getElementById('admKelas').value;
+  const list = document.getElementById('list-rekap');
+  list.innerHTML = '<p style="text-align:center; padding:20px;">Memuat data...</p>';
+  
+  const r = await fetch(API, {method:'POST', body:JSON.stringify({action:'get_rekap', tanggal:tgl, kelas:kls})});
+  const res = await r.json();
+  
+  list.innerHTML = '';
+  document.getElementById('totalLapor').innerText = res.data.length;
+  
+  if(res.data.length === 0) {
+    list.innerHTML = '<p style="text-align:center; padding:20px;">Belum ada laporan masuk.</p>';
+    return;
+  }
+
+  res.data.forEach(d => {
+    const raw = JSON.stringify(d.detail).replace(/"/g, '&quot;');
+    list.innerHTML += `
+      <div class="row-data" onclick="bukaDetail('${raw}')">
+        <div>
+          <div style="font-weight:bold;">${d.nama}</div>
+          <div style="font-size:0.8rem; color:#666;">${d.kelas} | ${d.waktu.split(' ')[1]}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="color:var(--primary); font-weight:bold;">${d.poin} Poin</div>
+          <div style="font-size:0.7rem;">${d.foto.length > 5 ? '📸 Ada Foto' : '❌ No Foto'}</div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function bukaDetail(jsonStr) {
+  const d = JSON.parse(jsonStr); 
+  // d adalah array: [Tanggal, User, Nama, Kelas, Puasa, KetP, Shalat, KetS, Tarawih, KetT, Tadarus, KetTd, Sedekah, KetSd, Foto, Lat, Long, Poin]
+  // Index: 0=Tgl, 2=Nama, 3=Kelas, 4=Puasa, 6=Shalat, 8=Tarawih, 10=Tadarus, 12=Sedekah, 14=Foto
+  
+  document.getElementById('mNama').innerText = d[2];
+  document.getElementById('mKelas').innerText = d[3];
+  
+  let html = `
+    <b>Puasa:</b> ${d[4]} <br><i>"${d[5]||'-'}"</i><hr style="margin:5px 0">
+    <b>Shalat:</b> ${d[6]} <br><i>"${d[7]||'-'}"</i><hr style="margin:5px 0">
+    <b>Tarawih:</b> ${d[8]} <br><i>"${d[9]||'-'}"</i><hr style="margin:5px 0">
+    <b>Tadarus:</b> ${d[10]} <br><i>"${d[11]||'-'}"</i><hr style="margin:5px 0">
+    <b>Sedekah:</b> ${d[12]} <br><i>"${d[13]||'-'}"</i>
+  `;
+  document.getElementById('mBody').innerHTML = html;
+  
+  const btnFoto = document.getElementById('mFoto');
+  if(d[14] && d[14].length > 5) {
+    btnFoto.href = d[14];
+    btnFoto.style.display = 'inline-block';
+  } else {
+    btnFoto.style.display = 'none';
+  }
+  
+  document.getElementById('modalDetail').style.display = 'flex';
 }
 </script>
-
 </body>
 </html>
