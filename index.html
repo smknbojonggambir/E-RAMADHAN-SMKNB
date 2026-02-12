@@ -24,8 +24,15 @@
   button:disabled { background: #ccc; }
   .act-group { border: 1px solid #f3f4f6; padding: 15px; border-radius: 12px; background: #fff; margin-bottom: 15px; border-left: 4px solid var(--accent); }
 
+  /* GPS STATUS BOX */
+  #gps-box {
+    padding: 10px; border-radius: 8px; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; margin-bottom: 15px;
+  }
+  .gps-loading { background: #fef3c7; color: #d97706; border: 1px solid #fcd34d; }
+  .gps-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+  .gps-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+
   /* ADMIN STYLES */
-  .admin-badge { background: #fef3c7; color: #d97706; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; font-weight: bold; }
   .row-data { padding: 12px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
   .row-data:hover { background: #f9fafb; }
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; justify-content: center; align-items: center; padding: 20px; }
@@ -57,6 +64,11 @@
 
     <div id="formIbadah" class="hidden">
       <div class="card">
+        <div id="gps-box" class="gps-loading">
+          <span id="gps-icon">🔄</span> 
+          <span id="gps-text">Sedang melacak lokasi kamu...</span>
+        </div>
+
         <div class="act-group"><b>1. Puasa?</b><select id="puasa"><option value="Ya">✅ Ya Full</option><option value="Setengah">🌗 Setengah</option><option value="Tidak">❌ Tidak</option></select><input id="k_puasa" placeholder="Ket..."></div>
         <div class="act-group"><b>2. Shalat Wajib?</b><select id="shalat"><option value="Ya">✅ Lengkap</option><option value="Bolong">⚠️ Bolong</option><option value="Tidak">❌ Tidak</option></select><input id="k_shalat" placeholder="Ket..."></div>
         <div class="act-group"><b>3. Tarawih?</b><select id="tarawih"><option value="Ya">✅ Ya</option><option value="Tidak">❌ Tidak</option></select><input id="k_tarawih" placeholder="Ket..."></div>
@@ -113,27 +125,29 @@
     <h3 id="mNama" style="margin-top:0; color:var(--primary);">Nama Siswa</h3>
     <p id="mKelas" style="color:#666; margin-bottom:15px;"></p>
     <div id="mBody"></div>
-    <div style="margin-top:15px; text-align:right;">
-      <a id="mFoto" href="#" target="_blank" style="text-decoration:none; color:white; background:#f59e0b; padding:8px 15px; border-radius:20px; font-size:0.9rem;">📸 Lihat Foto</a>
-      <button onclick="document.getElementById('modalDetail').style.display='none'" style="width:auto; margin-left:10px; background:#ddd; color:#333;">Tutup</button>
+    <div style="margin-top:15px; display:flex; gap:5px; flex-wrap:wrap;">
+      <a id="mFoto" href="#" target="_blank" style="text-decoration:none; color:white; background:#f59e0b; padding:8px 12px; border-radius:20px; font-size:0.8rem; flex:1; text-align:center;">📸 Lihat Foto</a>
+      
+      <a id="mMap" href="#" target="_blank" style="text-decoration:none; color:white; background:#3b82f6; padding:8px 12px; border-radius:20px; font-size:0.8rem; flex:1; text-align:center;">🗺️ Lihat Peta</a>
+      
+      <button onclick="document.getElementById('modalDetail').style.display='none'" style="width:auto; background:#ddd; color:#333; padding:8px 12px; border-radius:20px; font-size:0.8rem;">Tutup</button>
     </div>
   </div>
 </div>
 
 <script>
 // ==========================================
-// PASTE URL DEPLOYMENT DISINI
+// PASTE URL WEB APP DISINI
 // ==========================================
-const API = "https://script.google.com/macros/s/AKfycbz3dm2H3pyAusXp3JTsKm8WIgmwVCPXl2gPTDf0P627pkh6xOPlMwa8nCMdI2VbiNxkqQ/exec"; 
+const API = "URL_WEB_APP_ANDA_DISINI"; 
 
 let DATA_SISWA = {};
+let USER_LAT = '';
+let USER_LONG = '';
 
 // === INIT ===
 window.onload = function() {
-  // Set tanggal hari ini default untuk admin
   document.getElementById('admDate').valueAsDate = new Date();
-  
-  // Load Data Siswa
   fetch(API, {method: "POST", body: JSON.stringify({action: "get_siswa"})})
   .then(r=>r.json()).then(res => {
     if(res.status) {
@@ -171,7 +185,40 @@ function loadNama() {
     document.getElementById('areaNama').classList.remove('hidden');
   }
 }
-function bukaForm(){ document.getElementById('formIbadah').classList.remove('hidden'); }
+
+function bukaForm(){ 
+  document.getElementById('formIbadah').classList.remove('hidden'); 
+  cariLokasi(); // Cari GPS saat form dibuka
+}
+
+function cariLokasi() {
+  const box = document.getElementById('gps-box');
+  const txt = document.getElementById('gps-text');
+  const icn = document.getElementById('gps-icon');
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        USER_LAT = pos.coords.latitude;
+        USER_LONG = pos.coords.longitude;
+        box.className = 'gps-success';
+        txt.innerText = "Lokasi Terkunci: " + USER_LAT.toFixed(4) + ", " + USER_LONG.toFixed(4);
+        icn.innerText = "✅";
+      },
+      (err) => {
+        box.className = 'gps-error';
+        txt.innerText = "Gagal Deteksi Lokasi (Aktifkan GPS Browser!)";
+        icn.innerText = "❌";
+        USER_LAT = "Error"; USER_LONG = "Error";
+      },
+      { timeout: 10000, enableHighAccuracy: true }
+    );
+  } else {
+    box.className = 'gps-error';
+    txt.innerText = "Browser tidak dukung GPS";
+    icn.innerText = "❌";
+  }
+}
 
 async function kirim() {
   const f = document.getElementById('foto');
@@ -181,9 +228,6 @@ async function kirim() {
   const btn = document.getElementById('btnKirim');
   btn.innerText = "Mengirim..."; btn.disabled = true;
 
-  let lat='-', long='-';
-  try { const pos = await new Promise((r,j)=>navigator.geolocation.getCurrentPosition(r,j,{timeout:3000})); lat=pos.coords.latitude; long=pos.coords.longitude; } catch(e){}
-
   const r = new FileReader();
   r.readAsDataURL(f.files[0]);
   r.onload = async function() {
@@ -192,7 +236,8 @@ async function kirim() {
       username: document.getElementById('pNama').value,
       nama: document.querySelector('#pNama option:checked').getAttribute('data-n'),
       kelas: document.getElementById('pKelas').value,
-      foto: r.result, lat, long,
+      foto: r.result, 
+      lat: USER_LAT, long: USER_LONG, // Kirim Lat Long yg sudah didapat
       puasa: document.getElementById('puasa').value, ket_puasa: document.getElementById('k_puasa').value,
       shalat: document.getElementById('shalat').value, ket_shalat: document.getElementById('k_shalat').value,
       tarawih: document.getElementById('tarawih').value, ket_tarawih: document.getElementById('k_tarawih').value,
@@ -242,7 +287,8 @@ async function loadRekap() {
   }
 
   res.data.forEach(d => {
-    const raw = JSON.stringify(d.detail).replace(/"/g, '&quot;');
+    // Simpan LatLong di objek dataset agar mudah diambil
+    const raw = JSON.stringify(d).replace(/"/g, '&quot;');
     list.innerHTML += `
       <div class="row-data" onclick="bukaDetail('${raw}')">
         <div>
@@ -259,12 +305,12 @@ async function loadRekap() {
 }
 
 function bukaDetail(jsonStr) {
-  const d = JSON.parse(jsonStr); 
-  // d adalah array: [Tanggal, User, Nama, Kelas, Puasa, KetP, Shalat, KetS, Tarawih, KetT, Tadarus, KetTd, Sedekah, KetSd, Foto, Lat, Long, Poin]
-  // Index: 0=Tgl, 2=Nama, 3=Kelas, 4=Puasa, 6=Shalat, 8=Tarawih, 10=Tadarus, 12=Sedekah, 14=Foto
-  
-  document.getElementById('mNama').innerText = d[2];
-  document.getElementById('mKelas').innerText = d[3];
+  const obj = JSON.parse(jsonStr); 
+  // Obj format: {waktu, nama, kelas, poin, foto, lat, long, detail:[]}
+  const d = obj.detail;
+
+  document.getElementById('mNama').innerText = obj.nama;
+  document.getElementById('mKelas').innerText = obj.kelas;
   
   let html = `
     <b>Puasa:</b> ${d[4]} <br><i>"${d[5]||'-'}"</i><hr style="margin:5px 0">
@@ -275,12 +321,22 @@ function bukaDetail(jsonStr) {
   `;
   document.getElementById('mBody').innerHTML = html;
   
+  // Tombol Foto
   const btnFoto = document.getElementById('mFoto');
-  if(d[14] && d[14].length > 5) {
-    btnFoto.href = d[14];
-    btnFoto.style.display = 'inline-block';
+  if(obj.foto && obj.foto.length > 5) {
+    btnFoto.href = obj.foto;
+    btnFoto.style.display = 'block';
   } else {
     btnFoto.style.display = 'none';
+  }
+
+  // Tombol Maps
+  const btnMap = document.getElementById('mMap');
+  if(obj.lat && obj.long && obj.lat != '-' && obj.lat != 'Error') {
+    btnMap.href = `https://www.google.com/maps?q=${obj.lat},${obj.long}`;
+    btnMap.style.display = 'block';
+  } else {
+    btnMap.style.display = 'none';
   }
   
   document.getElementById('modalDetail').style.display = 'flex';
