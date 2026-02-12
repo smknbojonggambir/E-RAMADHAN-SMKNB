@@ -3,358 +3,254 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>E-RAMADHAN SMKNB 2026</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<title>MONITORING RAMADHAN</title>
 <style>
-  :root {
-    --primary: #2c5364;
-    --accent: #203a43;
-    --bg: #0f2027;
-  }
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, var(--bg), var(--accent), var(--primary));
-    color: white;
-    margin: 0;
-    padding: 20px;
-    min-height: 100vh;
-  }
-  h2 { margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+  :root { --main: #27ae60; --dark: #2c3e50; --bg: #f4f6f7; }
+  body { font-family: sans-serif; background: var(--dark); color: #333; margin: 0; padding: 10px; }
   
-  /* Kartu Container */
-  .card {
-    background: rgba(255, 255, 255, 0.95);
-    color: #333;
-    padding: 25px;
-    border-radius: 20px;
-    margin: 10px auto;
-    max-width: 400px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-  }
+  /* Layout */
+  .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+  .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px; }
+  .btn { padding: 10px; border: none; border-radius: 6px; cursor: pointer; color: white; background: var(--main); font-weight: bold; }
+  .btn-danger { background: #c0392b; font-size: 0.8em; }
   
-  /* Form Elements */
-  label { display: block; text-align: left; font-weight: bold; margin-top: 10px; font-size: 0.9em; }
-  select, input, button {
-    width: 100%;
-    padding: 12px;
-    margin: 5px 0 15px 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 16px;
-  }
+  /* Input & Form */
+  input, select, textarea { width: 100%; padding: 10px; margin: 5px 0 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
   
-  /* Button Styling */
-  button {
-    background: var(--primary);
-    color: white;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.1s, background 0.3s;
-  }
-  button:active { transform: scale(0.98); }
-  button:disabled { background: #999; cursor: not-allowed; }
+  /* SISWA: Accordion */
+  .act-item { border: 1px solid #eee; border-radius: 8px; margin-bottom: 5px; overflow: hidden; }
+  .act-head { background: #f9f9f9; padding: 12px; cursor: pointer; font-weight: 600; }
+  .act-body { display: none; padding: 12px; border-top: 1px solid #eee; }
+  .open .act-body { display: block; }
   
-  .preview {
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 10px;
-    border: 2px dashed #ccc;
-    display: none;
-  }
-
-  /* Loading Spinner Overlay */
-  #loadingOverlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7);
-    display: none;
-    justify-content: center; align-items: center; flex-direction: column;
-    z-index: 999;
-  }
-  .spinner {
-    width: 50px; height: 50px;
-    border: 5px solid #f3f3f3; border-top: 5px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  /* ADMIN: Table */
+  .table-res { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+  th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; }
+  th { background: #f1f1f1; }
+  .row-clk { cursor: pointer; transition: 0.2s; }
+  .row-clk:hover { background: #e8f6f3; }
+  
+  /* ADMIN: Detail Modal */
+  #modalDetail { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100; }
+  .modal-content { background: white; width: 90%; max-height: 80vh; overflow-y: auto; padding: 20px; border-radius: 10px; }
+  .detail-row { margin-bottom: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
   
   .hidden { display: none; }
 </style>
 </head>
-
 <body>
 
-<h2>🌙 E-RAMADHAN SMKNB 2026</h2>
-
-<div id="loadingOverlay">
-  <div class="spinner"></div>
-  <p style="color:white; margin-top:15px;">Memproses data...</p>
-</div>
-
-<div class="card" id="loginBox">
-  <h3>🔐 Login Siswa/Guru</h3>
-  <input id="u" placeholder="Username" type="text">
+<div id="p-login" class="card">
+  <h2 style="text-align:center; color:var(--main);">🌙 Login Monitoring</h2>
+  <input id="u" placeholder="Username">
   <input id="p" type="password" placeholder="Password">
-  <button onclick="handleLogin()">Masuk Aplikasi</button>
+  <button class="btn" onclick="login()" style="width:100%">MASUK</button>
 </div>
 
-<div id="app" class="hidden">
-  
+<div id="p-siswa" class="hidden">
   <div class="card">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3 id="welcomeText">Halo!</h3>
-      <button onclick="logout()" style="width:auto; padding:5px 10px; background:#c0392b; font-size:12px;">Logout</button>
+    <div class="header">
+      <b id="s-name">Siswa</b>
+      <button class="btn btn-danger" onclick="location.reload()">Keluar</button>
     </div>
-    <hr>
-    
-    <label>Apakah Berpuasa?</label>
-    <select id="puasa">
-      <option value="Ya">Ya, Puasa</option>
-      <option value="Tidak">Tidak / Berhalangan</option>
-    </select>
-
-    <label>Shalat 5 Waktu</label>
-    <select id="shalat">
-      <option value="Lengkap">Lengkap 5 Waktu</option>
-      <option value="Tidak Lengkap">Bolong-bolong</option>
-    </select>
-
-    <label>Shalat Tarawih</label>
-    <select id="tarawih">
-      <option value="Ya">Ya, Tarawih</option>
-      <option value="Tidak">Tidak</option>
-    </select>
-
-    <label>Tadarus Al-Quran</label>
-    <select id="tadarus">
-      <option value="Ya">Ya</option>
-      <option value="Tidak">Tidak</option>
-    </select>
-    
-    <label>Sedekah / Infaq</label>
-    <select id="sedekah">
-      <option value="Ya">Ya</option>
-      <option value="Tidak">Tidak</option>
-    </select>
-
-    <label>📸 Foto Dokumentasi (Wajib)</label>
-    <input type="file" id="foto" accept="image/*" capture="environment" onchange="processImage()">
-    <img id="preview" class="preview">
-    
-    <button onclick="kirimLaporan()" id="btnSimpan" style="margin-top:20px;">✅ KIRIIM LAPORAN</button>
+    <div id="list-act"></div>
+    <button class="btn" onclick="kirimLaporan()" style="width:100%; margin-top:10px;">📤 KIRIM LAPORAN</button>
   </div>
+</div>
 
-  <div class="card hidden" id="dashboard">
-    <h3>🏆 Ranking Keaktifan</h3>
-    <canvas id="chart"></canvas>
-    <button onclick="loadChart()" style="margin-top:10px; background:#e67e22;">🔄 Refresh Data</button>
+<div id="p-admin" class="hidden">
+  <div class="card">
+    <div class="header">
+      <b>👨‍🏫 Dashboard Guru</b>
+      <button class="btn btn-danger" onclick="location.reload()">Keluar</button>
+    </div>
+    
+    <div style="display:flex; gap:5px;">
+      <select id="adm-filter-kelas" onchange="renderTable()"><option value="All">Semua Kelas</option></select>
+      <input type="date" id="adm-filter-date" onchange="renderTable()">
+    </div>
+
+    <div class="table-res">
+      <table id="adm-table">
+        <thead><tr><th>Nama</th><th>Kelas</th><th>Poin</th><th>Aksi</th></tr></thead>
+        <tbody id="adm-tbody"></tbody>
+      </table>
+    </div>
   </div>
+</div>
 
+<div id="modalDetail">
+  <div class="modal-content">
+    <h3>📝 Detail Siswa</h3>
+    <div id="detail-content"></div>
+    
+    <h4 style="margin-bottom:5px;">💬 Berikan Catatan/Evaluasi:</h4>
+    <textarea id="adm-note-input" rows="3" placeholder="Tulis pesan untuk siswa..."></textarea>
+    <button class="btn" onclick="simpanCatatan()" style="width:100%">SIMPAN CATATAN</button>
+    <button class="btn btn-danger" onclick="closeModal()" style="width:100%; margin-top:5px; background:#999;">TUTUP</button>
+  </div>
 </div>
 
 <script>
-// ================= CONFIGURATION =================
-// PASTE URL WEB APP APPS SCRIPT DI SINI:
-const API_URL = "https://script.google.com/macros/s/AKfycbxIdKgmLx3xNjiAW_17rB4yW3wqHMhwJUQ0-v-W6X3Np_f4CI6GVtPTlFGTKg9cg_d0/exec"; 
+const API = "PASTE_URL_WEB_APP_DISINI"; 
+let USER = null;
+let REKAP_DATA = [];
+let ACTIVE_ROW = null; // Untuk admin menyimpan catatan
 
-let currentUser = null;
-let compressedImageBase64 = "";
+const ITEMS = ["1. Sahur", "2. Subuh", "3. Olahraga", "4. Keluarga", "5. Dzuhur", "6. Pesantren", "7. Ashar", "8. Sosial", "9. Buka", "10. Magrib", "11. Isya", "12. Tarawih", "13. Tadarus", "14. Tidur"];
 
-// ================= LOGIN FUNCTION =================
-async function handleLogin(){
-  const u = document.getElementById('u').value.trim();
-  const p = document.getElementById('p').value.trim();
+// === LOGIN ===
+async function login(){
+  const u = document.getElementById('u').value, p = document.getElementById('p').value;
+  const r = await fetch(API, {method:'POST', body:JSON.stringify({action:'login', u, p})});
+  const d = await r.json();
   
-  if(!u || !p) return alert("Username dan Password harus diisi!");
-  
-  loading(true);
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify({ action: "login", username: u, password: p })
-    });
-    const data = await res.json();
+  if(d.status){
+    USER = d;
+    document.getElementById('p-login').classList.add('hidden');
     
-    if(data.status){
-      currentUser = data;
-      document.getElementById('welcomeText').innerText = "Halo, " + data.nama;
-      document.getElementById('loginBox').classList.add('hidden');
-      document.getElementById('app').classList.remove('hidden');
-      
-      // Jika Admin, tampilkan chart
-      if(data.role.toLowerCase() === 'admin'){
-        document.getElementById('dashboard').classList.remove('hidden');
-        loadChart();
-      }
+    if(d.role === 'Admin'){
+      document.getElementById('p-admin').classList.remove('hidden');
+      loadAdminData();
     } else {
-      alert("Login Gagal: " + (data.message || "Cek username/password"));
+      document.getElementById('p-siswa').classList.remove('hidden');
+      document.getElementById('s-name').innerText = d.nama;
+      renderSiswaForm();
     }
-  } catch (err) {
-    alert("Gagal terhubung ke server. Cek koneksi internet.");
-    console.error(err);
-  }
-  loading(false);
+  } else { alert(d.message); }
 }
 
-// ================= IMAGE PROCESSING (RESIZE) =================
-function processImage(){
-  const fileInput = document.getElementById('foto');
-  const preview = document.getElementById('preview');
-  
-  if (fileInput.files && fileInput.files[0]) {
-    const file = fileInput.files[0];
-    const reader = new FileReader();
-    
-    reader.onload = function(e) {
-      const img = new Image();
-      img.src = e.target.result;
-      
-      img.onload = function() {
-        // Resize logic using Canvas
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        // Max width 800px (agar ringan upload ke Google)
-        const maxWidth = 800;
-        let width = img.width;
-        let height = img.height;
-        
-        if (width > maxWidth) {
-          height *= maxWidth / width;
-          width = maxWidth;
-        }
-        
-        canvas.width = width;
-        canvas.height = height;
-        ctx.drawImage(img, 0, 0, width, height);
-        
-        // Simpan hasil kompresi ke variabel global
-        compressedImageBase64 = canvas.toDataURL('image/jpeg', 0.7); // Quality 0.7
-        
-        // Tampilkan preview
-        preview.src = compressedImageBase64;
-        preview.style.display = "block";
-      }
-    }
-    reader.readAsDataURL(file);
-  }
-}
-
-// ================= SUBMIT DATA =================
-async function kirimLaporan(){
-  if(!compressedImageBase64) {
-    return alert("Harap ambil foto dokumentasi terlebih dahulu!");
-  }
-
-  const btn = document.getElementById('btnSimpan');
-  loading(true);
-  
-  // Ambil GPS (Optional, don't block if fails)
-  let lat = "", long = "";
-  try {
-    const pos = await getPosition();
-    lat = pos.coords.latitude;
-    long = pos.coords.longitude;
-  } catch(e) {
-    console.log("GPS tidak aktif/ditolak");
-  }
-
-  const payload = {
-    action: "simpan",
-    username: currentUser.username,
-    nama: currentUser.nama,
-    kelas: currentUser.kelas,
-    puasa: document.getElementById('puasa').value,
-    shalat: document.getElementById('shalat').value,
-    tarawih: document.getElementById('tarawih').value,
-    tadarus: document.getElementById('tadarus').value,
-    sedekah: document.getElementById('sedekah').value,
-    foto: compressedImageBase64,
-    lat: lat,
-    long: long
-  };
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-    const result = await res.json();
-    
-    if(result.status){
-      alert("✅ Laporan Berhasil Disimpan! Poin bertambah.");
-      resetForm();
-      if(currentUser.role === 'admin') loadChart();
-    } else {
-      alert("Gagal menyimpan: " + result.message);
-    }
-  } catch(err) {
-    alert("Terjadi kesalahan jaringan.");
-  }
-  loading(false);
-}
-
-// ================= CHART ADMIN =================
-let myChart = null;
-
-async function loadChart(){
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify({ action: "ranking" })
-    });
-    const data = await res.json();
-    
-    const ctx = document.getElementById('chart').getContext('2d');
-    
-    if(myChart) myChart.destroy();
-    
-    myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: Object.keys(data),
-        datasets: [{
-          label: 'Total Poin',
-          data: Object.values(data),
-          backgroundColor: 'rgba(54, 162, 235, 0.6)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: { y: { beginAtZero: true } }
-      }
-    });
-  } catch(e) { console.error("Gagal load chart"); }
-}
-
-// ================= UTILS =================
-function getPosition() {
-  return new Promise((resolve, reject) => {
-    if(!navigator.geolocation) reject();
-    navigator.geolocation.getCurrentPosition(resolve, reject, {timeout: 5000});
+// === LOGIC SISWA ===
+function renderSiswaForm(){
+  const c = document.getElementById('list-act');
+  ITEMS.forEach((n, i) => {
+    c.innerHTML += `
+      <div class="act-item">
+        <div class="act-head" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display==='block'?'none':'block'">${n}</div>
+        <div class="act-body">
+          <label>Jam:</label><input type="time" id="t_${i+1}">
+          <label>Foto:</label><input type="file" onchange="enc(this, ${i+1})"><br>
+          <label>Catatan:</label><input type="text" id="n_${i+1}">
+          <input type="hidden" id="img_${i+1}">
+        </div>
+      </div>`;
   });
 }
 
-function resetForm(){
-  document.getElementById('foto').value = "";
-  document.getElementById('preview').style.display = "none";
-  compressedImageBase64 = "";
+function enc(inp, id){
+  const r = new FileReader();
+  r.onload = e => document.getElementById('img_'+id).value = e.target.result;
+  r.readAsDataURL(inp.files[0]);
 }
 
-function loading(isLoading){
-  const overlay = document.getElementById('loadingOverlay');
-  overlay.style.display = isLoading ? 'flex' : 'none';
+async function kirimLaporan(){
+  if(!confirm("Kirim?")) return;
+  let data = {};
+  for(let i=1; i<=14; i++){
+    data["item_"+i] = {
+      time: document.getElementById('t_'+i).value,
+      note: document.getElementById('n_'+i).value,
+      img: document.getElementById('img_'+i).value
+    };
+  }
+  await fetch(API, {method:'POST', body:JSON.stringify({
+    action:'simpan', u:USER.u, nama:USER.nama, kelas:USER.kelas, gps:'-', data:data
+  })});
+  alert("Terkirim!"); location.reload();
 }
 
-function logout(){
-  location.reload();
+// === LOGIC ADMIN ===
+async function loadAdminData(){
+  const r = await fetch(API, {method:'POST', body:JSON.stringify({action:'get_rekap'})});
+  const res = await r.json();
+  REKAP_DATA = res.data;
+  
+  // Isi Pilihan Kelas
+  const kelasUnik = [...new Set(REKAP_DATA.map(x => x.kelas))];
+  const sel = document.getElementById('adm-filter-kelas');
+  kelasUnik.forEach(k => { sel.innerHTML += `<option value="${k}">${k}</option>`; });
+  
+  renderTable();
+}
+
+function renderTable(){
+  const k = document.getElementById('adm-filter-kelas').value;
+  const d = document.getElementById('adm-filter-date').value; // yyyy-mm-dd
+  const tb = document.getElementById('adm-tbody');
+  tb.innerHTML = '';
+
+  REKAP_DATA.forEach(row => {
+    // Filter Kelas
+    if(k !== 'All' && row.kelas !== k) return;
+    
+    // Filter Tanggal (Waktu format: dd/MM/yyyy HH:mm)
+    if(d) {
+      // Ubah dd/MM/yyyy jadi yyyy-mm-dd untuk compare
+      const parts = row.waktu.split(' ')[0].split('/');
+      const rowDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+      if(rowDate !== d) return;
+    }
+
+    tb.innerHTML += `
+      <tr class="row-clk">
+        <td>${row.nama}</td>
+        <td>${row.kelas}</td>
+        <td><b>${row.poin}</b></td>
+        <td><button class="btn" style="padding:5px; font-size:10px;" onclick="openDetail(${row.row})">Cek</button></td>
+      </tr>`;
+  });
+}
+
+function openDetail(rowIndex){
+  const data = REKAP_DATA.find(x => x.row === rowIndex);
+  ACTIVE_ROW = rowIndex;
+  
+  const content = document.getElementById('detail-content');
+  content.innerHTML = `<p><b>Waktu Kirim:</b> ${data.waktu}</p><hr>`;
+  
+  // Data aktivitas ada di array 'detail' index 4 s/d 17 (Kolom E-R)
+  // Kolom U (Catatan Guru) ada di index 20
+  
+  ITEMS.forEach((nama, idx) => {
+    const raw = data.detail[idx + 4]; // Geser 4 kolom (A-D)
+    if(raw && raw !== "-"){
+      const parts = raw.split('|'); // Pisahkan Time | Note | Link
+      const time = parts[0] || "";
+      const note = parts[1] || "";
+      const img = parts[2] && parts[2].includes('http') ? `<a href="${parts[2]}" target="_blank">Lihat Foto</a>` : "Tidak ada foto";
+      
+      content.innerHTML += `
+        <div class="detail-row">
+          <b>${nama}</b><br>
+          <small>🕒 ${time} | 📝 ${note}</small><br>
+          <small>${img}</small>
+        </div>`;
+    }
+  });
+
+  // Isi kotak input dengan catatan yang sudah ada
+  document.getElementById('adm-note-input').value = data.catatan_guru || "";
+  
+  document.getElementById('modalDetail').style.display = 'flex';
+}
+
+function closeModal(){ document.getElementById('modalDetail').style.display = 'none'; }
+
+async function simpanCatatan(){
+  const note = document.getElementById('adm-note-input').value;
+  const btn = document.querySelector('#modalDetail button');
+  btn.innerText = "Menyimpan...";
+  
+  await fetch(API, {method:'POST', body:JSON.stringify({
+    action:'save_note', row:ACTIVE_ROW, note:note
+  })});
+  
+  alert("Catatan tersimpan!");
+  closeModal();
+  loadAdminData(); // Refresh data
+  btn.innerText = "SIMPAN CATATAN";
 }
 </script>
-
 </body>
 </html>
