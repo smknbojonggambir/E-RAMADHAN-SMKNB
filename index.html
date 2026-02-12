@@ -33,6 +33,11 @@ button{
   border:none;
   cursor:pointer;
 }
+.preview{
+  width:100%;
+  border-radius:10px;
+  margin-top:10px;
+}
 </style>
 </head>
 
@@ -40,6 +45,7 @@ button{
 
 <h2>🌙 E-RAMADHAN SMKNB 2026</h2>
 
+<!-- LOGIN -->
 <div class="card" id="loginBox">
   <h3>Login</h3>
   <input id="u" placeholder="Username">
@@ -49,6 +55,7 @@ button{
 
 <div id="app" style="display:none;">
 
+<!-- FORM -->
 <div class="card">
 <h3>Laporan Ibadah</h3>
 
@@ -77,10 +84,15 @@ button{
 <option>Tidak</option>
 </select>
 
+<!-- FOTO SELFIE -->
+<input type="file" id="foto" accept="image/*" capture="environment" onchange="previewFoto()">
+<img id="preview" class="preview" style="display:none;">
+
 <button onclick="simpan()">Simpan</button>
 
 </div>
 
+<!-- DASHBOARD ADMIN -->
 <div class="card" id="dashboard" style="display:none;">
 <h3>Ranking</h3>
 <canvas id="chart"></canvas>
@@ -89,9 +101,11 @@ button{
 </div>
 
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycby4vHWTduc7EgtSdviuhHdqsRlAoYqAi18EWmjrM97GIL_RdKAL2J8q3eyLyG_7mm8X/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbwju5qe3nPzE85OPQ16nsX691YLuBADfmhwunIjLWMWLhDmdyK7yntcS5BrkE2ECKi6/exec";
 let user={};
+let chartInstance=null;
 
+// ================= LOGIN =================
 async function login(){
 try{
 const res=await fetch(API_URL,{
@@ -110,20 +124,56 @@ if(data.status){
 user=data;
 loginBox.style.display="none";
 app.style.display="block";
+
 if(data.role=="admin"){
 dashboard.style.display="block";
 loadChart();
 }
+
 }else{
 alert("Login gagal");
 }
-}catch(err){
+}catch{
 alert("Server tidak merespon");
 }
 }
 
+// ================= PREVIEW FOTO =================
+function previewFoto(){
+const file=document.getElementById("foto").files[0];
+if(!file) return;
+
+const reader=new FileReader();
+reader.onload=function(e){
+preview.src=e.target.result;
+preview.style.display="block";
+}
+reader.readAsDataURL(file);
+}
+
+// ================= SIMPAN =================
 async function simpan(){
 try{
+
+let base64Foto="";
+const file=document.getElementById("foto").files[0];
+
+if(file){
+base64Foto=await toBase64(file);
+}
+
+// Ambil GPS
+let lat="",long="";
+if(navigator.geolocation){
+await new Promise((resolve)=>{
+navigator.geolocation.getCurrentPosition(pos=>{
+lat=pos.coords.latitude;
+long=pos.coords.longitude;
+resolve();
+},()=>resolve());
+});
+}
+
 await fetch(API_URL,{
 method:"POST",
 headers:{"Content-Type":"application/json"},
@@ -136,15 +186,37 @@ puasa:puasa.value,
 shalat:shalat.value,
 tarawih:tarawih.value,
 tadarus:tadarus.value,
-sedekah:sedekah.value
+sedekah:sedekah.value,
+foto:base64Foto,
+lat:lat,
+long:long
 })
 });
-alert("Berhasil disimpan");
+
+alert("Berhasil disimpan ✅");
+
+document.getElementById("foto").value="";
+preview.style.display="none";
+
+if(user.role=="admin"){
+loadChart();
+}
+
 }catch{
 alert("Gagal kirim data");
 }
 }
 
+function toBase64(file){
+return new Promise((resolve,reject)=>{
+const reader=new FileReader();
+reader.readAsDataURL(file);
+reader.onload=()=>resolve(reader.result);
+reader.onerror=error=>reject(error);
+});
+}
+
+// ================= RANKING =================
 async function loadChart(){
 const res=await fetch(API_URL,{
 method:"POST",
@@ -153,7 +225,11 @@ body:JSON.stringify({action:"ranking"})
 });
 const data=await res.json();
 
-new Chart(document.getElementById("chart"),{
+if(chartInstance){
+chartInstance.destroy();
+}
+
+chartInstance=new Chart(document.getElementById("chart"),{
 type:"bar",
 data:{
 labels:Object.keys(data),
@@ -162,7 +238,12 @@ label:"Total Poin",
 data:Object.values(data)
 }]
 },
-options:{responsive:true}
+options:{
+responsive:true,
+plugins:{
+legend:{display:false}
+}
+}
 });
 }
 </script>
