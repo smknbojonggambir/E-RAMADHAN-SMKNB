@@ -3,254 +3,217 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>MONITORING RAMADHAN</title>
+<title>Lapor Ibadah</title>
 <style>
-  :root { --main: #27ae60; --dark: #2c3e50; --bg: #f4f6f7; }
-  body { font-family: sans-serif; background: var(--dark); color: #333; margin: 0; padding: 10px; }
+  body { font-family: sans-serif; background: #f0f2f5; margin: 0; padding: 15px; color: #333; }
+  .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; }
+  h2 { text-align: center; color: #2e7d32; margin-top: 0; }
   
-  /* Layout */
-  .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-  .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px; }
-  .btn { padding: 10px; border: none; border-radius: 6px; cursor: pointer; color: white; background: var(--main); font-weight: bold; }
-  .btn-danger { background: #c0392b; font-size: 0.8em; }
+  label { font-weight: bold; font-size: 14px; display: block; margin-top: 15px; margin-bottom: 5px; }
+  select, input[type="text"], textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
   
-  /* Input & Form */
-  input, select, textarea { width: 100%; padding: 10px; margin: 5px 0 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+  /* Group Input Aktivitas */
+  .act-group { border: 1px solid #e0e0e0; padding: 10px; border-radius: 8px; margin-top: 10px; background: #fafafa; }
+  .act-title { font-weight: bold; color: #1565c0; margin-bottom: 5px; }
   
-  /* SISWA: Accordion */
-  .act-item { border: 1px solid #eee; border-radius: 8px; margin-bottom: 5px; overflow: hidden; }
-  .act-head { background: #f9f9f9; padding: 12px; cursor: pointer; font-weight: 600; }
-  .act-body { display: none; padding: 12px; border-top: 1px solid #eee; }
-  .open .act-body { display: block; }
+  button { width: 100%; padding: 15px; background: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; margin-top: 20px; cursor: pointer; }
+  button:disabled { background: #ccc; }
   
-  /* ADMIN: Table */
-  .table-res { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
-  th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; }
-  th { background: #f1f1f1; }
-  .row-clk { cursor: pointer; transition: 0.2s; }
-  .row-clk:hover { background: #e8f6f3; }
-  
-  /* ADMIN: Detail Modal */
-  #modalDetail { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100; }
-  .modal-content { background: white; width: 90%; max-height: 80vh; overflow-y: auto; padding: 20px; border-radius: 10px; }
-  .detail-row { margin-bottom: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
-  
+  #loading { display: none; text-align: center; margin-top: 10px; color: #666; }
   .hidden { display: none; }
 </style>
 </head>
 <body>
 
-<div id="p-login" class="card">
-  <h2 style="text-align:center; color:var(--main);">🌙 Login Monitoring</h2>
-  <input id="u" placeholder="Username">
-  <input id="p" type="password" placeholder="Password">
-  <button class="btn" onclick="login()" style="width:100%">MASUK</button>
-</div>
+<div class="card">
+  <h2>📋 Lapor Ibadah Harian</h2>
+  
+  <label>Pilih Kelas:</label>
+  <select id="pilihKelas" onchange="loadNama()">
+    <option value="">-- Loading Kelas --</option>
+  </select>
 
-<div id="p-siswa" class="hidden">
-  <div class="card">
-    <div class="header">
-      <b id="s-name">Siswa</b>
-      <button class="btn btn-danger" onclick="location.reload()">Keluar</button>
-    </div>
-    <div id="list-act"></div>
-    <button class="btn" onclick="kirimLaporan()" style="width:100%; margin-top:10px;">📤 KIRIM LAPORAN</button>
+  <div id="boxNama" class="hidden">
+    <label>Pilih Nama Kamu:</label>
+    <select id="pilihNama">
+      <option value="">-- Pilih Nama --</option>
+    </select>
   </div>
-</div>
 
-<div id="p-admin" class="hidden">
-  <div class="card">
-    <div class="header">
-      <b>👨‍🏫 Dashboard Guru</b>
-      <button class="btn btn-danger" onclick="location.reload()">Keluar</button>
-    </div>
+  <hr>
+
+  <div id="formIbadah" class="hidden">
     
-    <div style="display:flex; gap:5px;">
-      <select id="adm-filter-kelas" onchange="renderTable()"><option value="All">Semua Kelas</option></select>
-      <input type="date" id="adm-filter-date" onchange="renderTable()">
+    <div class="act-group">
+      <div class="act-title">1. Puasa Hari Ini?</div>
+      <select id="puasa">
+        <option value="Ya">Ya, Puasa Penuh</option>
+        <option value="Setengah">Setengah Hari</option>
+        <option value="Tidak">Tidak / Berhalangan</option>
+      </select>
+      <input type="text" id="ket_puasa" placeholder="Catatan (Opsional)">
     </div>
 
-    <div class="table-res">
-      <table id="adm-table">
-        <thead><tr><th>Nama</th><th>Kelas</th><th>Poin</th><th>Aksi</th></tr></thead>
-        <tbody id="adm-tbody"></tbody>
-      </table>
+    <div class="act-group">
+      <div class="act-title">2. Shalat Wajib (5 Waktu)?</div>
+      <select id="shalat">
+        <option value="Ya">Lengkap 5 Waktu</option>
+        <option value="Bolong">Ada yang bolong</option>
+        <option value="Tidak">Tidak Shalat</option>
+      </select>
+      <input type="text" id="ket_shalat" placeholder="Ket: Shalat apa yang bolong?">
     </div>
-  </div>
-</div>
 
-<div id="modalDetail">
-  <div class="modal-content">
-    <h3>📝 Detail Siswa</h3>
-    <div id="detail-content"></div>
-    
-    <h4 style="margin-bottom:5px;">💬 Berikan Catatan/Evaluasi:</h4>
-    <textarea id="adm-note-input" rows="3" placeholder="Tulis pesan untuk siswa..."></textarea>
-    <button class="btn" onclick="simpanCatatan()" style="width:100%">SIMPAN CATATAN</button>
-    <button class="btn btn-danger" onclick="closeModal()" style="width:100%; margin-top:5px; background:#999;">TUTUP</button>
+    <div class="act-group">
+      <div class="act-title">3. Shalat Tarawih?</div>
+      <select id="tarawih">
+        <option value="Ya">Ya</option>
+        <option value="Tidak">Tidak</option>
+      </select>
+      <input type="text" id="ket_tarawih" placeholder="Ket: Di Masjid/Rumah?">
+    </div>
+
+    <div class="act-group">
+      <div class="act-title">4. Tadarus Al-Quran?</div>
+      <select id="tadarus">
+        <option value="Ya">Ya</option>
+        <option value="Tidak">Tidak</option>
+      </select>
+      <input type="text" id="ket_tadarus" placeholder="Ket: Surat apa / Juz berapa?">
+    </div>
+
+    <div class="act-group">
+      <div class="act-title">5. Bersedekah / Infak?</div>
+      <select id="sedekah">
+        <option value="Ya">Ya</option>
+        <option value="Tidak">Tidak</option>
+      </select>
+      <input type="text" id="ket_sedekah" placeholder="Ket: Bentuk sedekah?">
+    </div>
+
+    <label>📸 Foto Dokumentasi (Salah satu kegiatan)</label>
+    <input type="file" id="fotoInput" accept="image/*" capture="environment">
+    <small style="color:red; display:block; margin-top:5px;">*Foto wajib diisi</small>
+
+    <button onclick="kirim()" id="btnKirim">KIRIM LAPORAN</button>
+    <div id="loading">Mengirim data... Jangan tutup halaman...</div>
   </div>
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbyj9jrCTwgARYLpFhaZwn4QoWmvVHqb0dFA_EWT6oRhsGtHEhePxkyMIGvFs693tJE0/exec"; 
-let USER = null;
-let REKAP_DATA = [];
-let ACTIVE_ROW = null; // Untuk admin menyimpan catatan
+// GANTI URL INI DENGAN URL DEPLOYMENT APPS SCRIPT (Exec)
+const API_URL = "https://script.google.com/macros/s/AKfycbwR3teEkRtlaNypd2FQecbLrv6Axx0lTXDDPKiDwyF5YUSpXCet6bUrt_EbKxl1ZCo-Cg/exec"; 
 
-const ITEMS = ["1. Sahur", "2. Subuh", "3. Olahraga", "4. Keluarga", "5. Dzuhur", "6. Pesantren", "7. Ashar", "8. Sosial", "9. Buka", "10. Magrib", "11. Isya", "12. Tarawih", "13. Tadarus", "14. Tidur"];
+let DATA_SISWA = {}; // Menyimpan data lokal
 
-// === LOGIN ===
-async function login(){
-  const u = document.getElementById('u').value, p = document.getElementById('p').value;
-  const r = await fetch(API, {method:'POST', body:JSON.stringify({action:'login', u, p})});
-  const d = await r.json();
-  
-  if(d.status){
-    USER = d;
-    document.getElementById('p-login').classList.add('hidden');
-    
-    if(d.role === 'Admin'){
-      document.getElementById('p-admin').classList.remove('hidden');
-      loadAdminData();
-    } else {
-      document.getElementById('p-siswa').classList.remove('hidden');
-      document.getElementById('s-name').innerText = d.nama;
-      renderSiswaForm();
-    }
-  } else { alert(d.message); }
-}
-
-// === LOGIC SISWA ===
-function renderSiswaForm(){
-  const c = document.getElementById('list-act');
-  ITEMS.forEach((n, i) => {
-    c.innerHTML += `
-      <div class="act-item">
-        <div class="act-head" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display==='block'?'none':'block'">${n}</div>
-        <div class="act-body">
-          <label>Jam:</label><input type="time" id="t_${i+1}">
-          <label>Foto:</label><input type="file" onchange="enc(this, ${i+1})"><br>
-          <label>Catatan:</label><input type="text" id="n_${i+1}">
-          <input type="hidden" id="img_${i+1}">
-        </div>
-      </div>`;
+// Load Data saat web dibuka
+window.onload = function() {
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({ action: "get_siswa" })
+  })
+  .then(res => res.json())
+  .then(res => {
+    if(res.status) {
+      DATA_SISWA = res.data;
+      const selKelas = document.getElementById('pilihKelas');
+      selKelas.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+      Object.keys(DATA_SISWA).forEach(k => {
+        selKelas.innerHTML += `<option value="${k}">${k}</option>`;
+      });
+    } else { alert("Gagal mengambil data siswa"); }
   });
-}
+};
 
-function enc(inp, id){
-  const r = new FileReader();
-  r.onload = e => document.getElementById('img_'+id).value = e.target.result;
-  r.readAsDataURL(inp.files[0]);
-}
-
-async function kirimLaporan(){
-  if(!confirm("Kirim?")) return;
-  let data = {};
-  for(let i=1; i<=14; i++){
-    data["item_"+i] = {
-      time: document.getElementById('t_'+i).value,
-      note: document.getElementById('n_'+i).value,
-      img: document.getElementById('img_'+i).value
-    };
+// Saat Kelas Dipilih -> Munculkan Nama
+function loadNama() {
+  const k = document.getElementById('pilihKelas').value;
+  const selNama = document.getElementById('pilihNama');
+  
+  if (k && DATA_SISWA[k]) {
+    selNama.innerHTML = '<option value="">-- Pilih Nama --</option>';
+    DATA_SISWA[k].forEach(s => {
+      // Value kita simpan username untuk dikirim ke backend
+      selNama.innerHTML += `<option value="${s.user}" data-nama="${s.nama}">${s.nama}</option>`;
+    });
+    document.getElementById('boxNama').classList.remove('hidden');
+    document.getElementById('formIbadah').classList.remove('hidden');
+  } else {
+    document.getElementById('boxNama').classList.add('hidden');
+    document.getElementById('formIbadah').classList.add('hidden');
   }
-  await fetch(API, {method:'POST', body:JSON.stringify({
-    action:'simpan', u:USER.u, nama:USER.nama, kelas:USER.kelas, gps:'-', data:data
-  })});
-  alert("Terkirim!"); location.reload();
 }
 
-// === LOGIC ADMIN ===
-async function loadAdminData(){
-  const r = await fetch(API, {method:'POST', body:JSON.stringify({action:'get_rekap'})});
-  const res = await r.json();
-  REKAP_DATA = res.data;
+async function kirim() {
+  const username = document.getElementById('pilihNama').value;
+  const namaOption = document.querySelector('#pilihNama option:checked');
+  const nama = namaOption ? namaOption.getAttribute('data-nama') : "";
+  const kelas = document.getElementById('pilihKelas').value;
   
-  // Isi Pilihan Kelas
-  const kelasUnik = [...new Set(REKAP_DATA.map(x => x.kelas))];
-  const sel = document.getElementById('adm-filter-kelas');
-  kelasUnik.forEach(k => { sel.innerHTML += `<option value="${k}">${k}</option>`; });
+  const fotoInp = document.getElementById('fotoInput');
   
-  renderTable();
-}
+  if (!username || !kelas) return alert("Pilih Nama dan Kelas dulu!");
+  if (fotoInp.files.length === 0) return alert("Wajib upload foto bukti!");
 
-function renderTable(){
-  const k = document.getElementById('adm-filter-kelas').value;
-  const d = document.getElementById('adm-filter-date').value; // yyyy-mm-dd
-  const tb = document.getElementById('adm-tbody');
-  tb.innerHTML = '';
+  document.getElementById('btnKirim').disabled = true;
+  document.getElementById('loading').style.display = 'block';
 
-  REKAP_DATA.forEach(row => {
-    // Filter Kelas
-    if(k !== 'All' && row.kelas !== k) return;
-    
-    // Filter Tanggal (Waktu format: dd/MM/yyyy HH:mm)
-    if(d) {
-      // Ubah dd/MM/yyyy jadi yyyy-mm-dd untuk compare
-      const parts = row.waktu.split(' ')[0].split('/');
-      const rowDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-      if(rowDate !== d) return;
-    }
+  // 1. Ambil GPS
+  let lat = '', long = '';
+  try {
+    const pos = await new Promise((res, rej) => 
+      navigator.geolocation.getCurrentPosition(res, rej, {timeout: 3000})
+    );
+    lat = pos.coords.latitude; 
+    long = pos.coords.longitude;
+  } catch(e) { console.log("GPS off"); }
 
-    tb.innerHTML += `
-      <tr class="row-clk">
-        <td>${row.nama}</td>
-        <td>${row.kelas}</td>
-        <td><b>${row.poin}</b></td>
-        <td><button class="btn" style="padding:5px; font-size:10px;" onclick="openDetail(${row.row})">Cek</button></td>
-      </tr>`;
-  });
-}
+  // 2. Proses Foto
+  const reader = new FileReader();
+  reader.readAsDataURL(fotoInp.files[0]);
+  
+  reader.onload = async function() {
+    const base64 = reader.result;
 
-function openDetail(rowIndex){
-  const data = REKAP_DATA.find(x => x.row === rowIndex);
-  ACTIVE_ROW = rowIndex;
-  
-  const content = document.getElementById('detail-content');
-  content.innerHTML = `<p><b>Waktu Kirim:</b> ${data.waktu}</p><hr>`;
-  
-  // Data aktivitas ada di array 'detail' index 4 s/d 17 (Kolom E-R)
-  // Kolom U (Catatan Guru) ada di index 20
-  
-  ITEMS.forEach((nama, idx) => {
-    const raw = data.detail[idx + 4]; // Geser 4 kolom (A-D)
-    if(raw && raw !== "-"){
-      const parts = raw.split('|'); // Pisahkan Time | Note | Link
-      const time = parts[0] || "";
-      const note = parts[1] || "";
-      const img = parts[2] && parts[2].includes('http') ? `<a href="${parts[2]}" target="_blank">Lihat Foto</a>` : "Tidak ada foto";
+    const payload = {
+      action: "simpan",
+      username: username,
+      nama: nama,
+      kelas: kelas,
+      lat: lat, long: long,
+      foto: base64,
       
-      content.innerHTML += `
-        <div class="detail-row">
-          <b>${nama}</b><br>
-          <small>🕒 ${time} | 📝 ${note}</small><br>
-          <small>${img}</small>
-        </div>`;
+      // Data Ibadah
+      puasa: document.getElementById('puasa').value,
+      ket_puasa: document.getElementById('ket_puasa').value,
+      shalat: document.getElementById('shalat').value,
+      ket_shalat: document.getElementById('ket_shalat').value,
+      tarawih: document.getElementById('tarawih').value,
+      ket_tarawih: document.getElementById('ket_tarawih').value,
+      tadarus: document.getElementById('tadarus').value,
+      ket_tadarus: document.getElementById('ket_tadarus').value,
+      sedekah: document.getElementById('sedekah').value,
+      ket_sedekah: document.getElementById('ket_sedekah').value
+    };
+
+    try {
+      const req = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+      const res = await req.json();
+      if(res.status) {
+        alert("✅ Alhamdulillah, Laporan Terkirim!\nPoin kamu: " + res.poin);
+        location.reload();
+      } else {
+        alert("Gagal mengirim: " + res.message);
+        document.getElementById('btnKirim').disabled = false;
+      }
+    } catch(e) {
+      alert("Error Koneksi.");
+      document.getElementById('btnKirim').disabled = false;
     }
-  });
-
-  // Isi kotak input dengan catatan yang sudah ada
-  document.getElementById('adm-note-input').value = data.catatan_guru || "";
-  
-  document.getElementById('modalDetail').style.display = 'flex';
-}
-
-function closeModal(){ document.getElementById('modalDetail').style.display = 'none'; }
-
-async function simpanCatatan(){
-  const note = document.getElementById('adm-note-input').value;
-  const btn = document.querySelector('#modalDetail button');
-  btn.innerText = "Menyimpan...";
-  
-  await fetch(API, {method:'POST', body:JSON.stringify({
-    action:'save_note', row:ACTIVE_ROW, note:note
-  })});
-  
-  alert("Catatan tersimpan!");
-  closeModal();
-  loadAdminData(); // Refresh data
-  btn.innerText = "SIMPAN CATATAN";
+    document.getElementById('loading').style.display = 'none';
+  };
 }
 </script>
+
 </body>
 </html>
