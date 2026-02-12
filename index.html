@@ -3,105 +3,255 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Lapor Ibadah</title>
+<title>E-RAMADHAN SMKNB</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-  body { font-family: sans-serif; background: #f0f2f5; margin: 0; padding: 15px; color: #333; }
-  .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; }
-  h2 { text-align: center; color: #2e7d32; margin-top: 0; }
+  :root {
+    --primary: #065f46; /* Hijau Tua Mewah */
+    --primary-light: #059669; /* Hijau Terang */
+    --accent: #f59e0b; /* Emas */
+    --bg-color: #f0fdf4; /* Background kehijauan sangat muda */
+    --card-bg: #ffffff;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+  }
+
+  body { 
+    font-family: 'Poppins', sans-serif; 
+    background: var(--bg-color); 
+    margin: 0; 
+    padding: 0; 
+    color: var(--text-dark); 
+    padding-bottom: 40px;
+  }
+
+  /* --- HEADER DENGAN LOGO --- */
+  .header-container {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    padding: 30px 20px 50px; /* Padding bawah lebih besar untuk efek melengkung */
+    text-align: center;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    box-shadow: 0 10px 20px rgba(6, 95, 70, 0.2);
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo-img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    background: white;
+    border-radius: 50%;
+    padding: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    margin-bottom: 10px;
+  }
+
+  .header-container h1 { margin: 5px 0 0; font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; }
+  .header-container p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.9; font-weight: 300; }
+
+  /* --- KARTU UTAMA --- */
+  .main-wrapper {
+    max-width: 500px;
+    margin: -40px auto 0; /* Menarik ke atas menutupi header */
+    padding: 0 15px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .card { 
+    background: var(--card-bg); 
+    padding: 25px; 
+    border-radius: 20px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+    margin-bottom: 20px;
+    animation: fadeUp 0.6s ease-out;
+  }
+
+  /* --- INPUT STYLES --- */
+  label { font-weight: 600; font-size: 0.9rem; display: block; margin-top: 15px; margin-bottom: 8px; color: var(--primary); }
   
-  label { font-weight: bold; font-size: 14px; display: block; margin-top: 15px; margin-bottom: 5px; }
-  select, input[type="text"], textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+  select, input[type="text"], input[type="file"] { 
+    width: 100%; 
+    padding: 14px; 
+    border: 1px solid #e5e7eb; 
+    border-radius: 12px; 
+    box-sizing: border-box; 
+    font-size: 0.95rem; 
+    background: #f9fafb;
+    transition: all 0.3s;
+    font-family: inherit;
+    outline: none;
+  }
   
-  /* Group Input Aktivitas */
-  .act-group { border: 1px solid #e0e0e0; padding: 10px; border-radius: 8px; margin-top: 10px; background: #fafafa; }
-  .act-title { font-weight: bold; color: #1565c0; margin-bottom: 5px; }
+  select:focus, input:focus { 
+    border-color: var(--primary-light); 
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); 
+  }
+
+  /* --- ACTIVITY GROUP --- */
+  .act-group { 
+    border: 1px solid #f3f4f6; 
+    padding: 15px; 
+    border-radius: 15px; 
+    margin-top: 15px; 
+    background: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    border-left: 5px solid var(--accent); /* Aksen Emas di kiri */
+  }
   
-  button { width: 100%; padding: 15px; background: #2e7d32; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; margin-top: 20px; cursor: pointer; }
-  button:disabled { background: #ccc; }
-  
-  #loading { display: none; text-align: center; margin-top: 10px; color: #666; }
+  .act-title { 
+    font-weight: 700; 
+    color: var(--text-dark); 
+    margin-bottom: 10px; 
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  /* --- TOMBOL --- */
+  button { 
+    width: 100%; 
+    padding: 16px; 
+    background: linear-gradient(to right, var(--primary), var(--primary-light)); 
+    color: white; 
+    border: none; 
+    border-radius: 50px; 
+    font-weight: 700; 
+    font-size: 1rem; 
+    margin-top: 25px; 
+    cursor: pointer; 
+    box-shadow: 0 5px 15px rgba(6, 95, 70, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  button:active { transform: scale(0.98); }
+  button:disabled { background: #d1d5db; cursor: not-allowed; box-shadow: none; }
+
+  /* --- UTILS --- */
   .hidden { display: none; }
+  hr { border: 0; border-top: 1px dashed #d1d5db; margin: 25px 0; }
+  
+  /* Upload Area */
+  input[type="file"] {
+    background: #ecfdf5;
+    border: 2px dashed #10b981;
+    color: var(--primary);
+  }
+
+  /* Loading Animation */
+  #loading { display: none; text-align: center; margin-top: 15px; color: var(--primary); font-weight: 600; }
+  
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .footer { text-align: center; font-size: 0.8rem; color: #9ca3af; margin-top: 30px; }
 </style>
 </head>
 <body>
 
-<div class="card">
-  <h2>📋 Lapor Ibadah Harian</h2>
-  
-  <label>Pilih Kelas:</label>
-  <select id="pilihKelas" onchange="loadNama()">
-    <option value="">-- Loading Kelas --</option>
-  </select>
+<div class="header-container">
+  <img src="https://raw.githubusercontent.com/smknbojonggambir/E-RAMADHAN-SMKNB/main/LOGO.png" alt="Logo Sekolah" class="logo-img">
+  <h1>E-RAMADHAN SMKNB</h1>
+  <p>Laporan Ibadah Harian Siswa</p>
+</div>
 
-  <div id="boxNama" class="hidden">
-    <label>Pilih Nama Kamu:</label>
-    <select id="pilihNama">
-      <option value="">-- Pilih Nama --</option>
-    </select>
-  </div>
-
-  <hr>
-
-  <div id="formIbadah" class="hidden">
+<div class="main-wrapper">
+  <div class="card">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h3 style="margin:0; color:var(--primary);">📋 Form Laporan</h3>
+      <small style="color:var(--text-light);">Isi data dengan jujur dan benar</small>
+    </div>
     
-    <div class="act-group">
-      <div class="act-title">1. Puasa Hari Ini?</div>
-      <select id="puasa">
-        <option value="Ya">Ya, Puasa Penuh</option>
-        <option value="Setengah">Setengah Hari</option>
-        <option value="Tidak">Tidak / Berhalangan</option>
+    <label>Pilih Kelas</label>
+    <select id="pilihKelas" onchange="loadNama()">
+      <option value="">-- Sedang Memuat Data... --</option>
+    </select>
+
+    <div id="boxNama" class="hidden">
+      <label>Pilih Nama Kamu</label>
+      <select id="pilihNama">
+        <option value="">-- Pilih Nama --</option>
       </select>
-      <input type="text" id="ket_puasa" placeholder="Catatan (Opsional)">
     </div>
 
-    <div class="act-group">
-      <div class="act-title">2. Shalat Wajib (5 Waktu)?</div>
-      <select id="shalat">
-        <option value="Ya">Lengkap 5 Waktu</option>
-        <option value="Bolong">Ada yang bolong</option>
-        <option value="Tidak">Tidak Shalat</option>
-      </select>
-      <input type="text" id="ket_shalat" placeholder="Ket: Shalat apa yang bolong?">
+    <div id="formIbadah" class="hidden">
+      <hr>
+      
+      <div class="act-group">
+        <div class="act-title">1. Puasa Hari Ini?</div>
+        <select id="puasa">
+          <option value="Ya">✅ Ya, Puasa Penuh</option>
+          <option value="Setengah">🌗 Setengah Hari</option>
+          <option value="Tidak">❌ Tidak / Berhalangan</option>
+        </select>
+        <input type="text" id="ket_puasa" placeholder="Alasan (Jika tidak puasa)...">
+      </div>
+
+      <div class="act-group">
+        <div class="act-title">2. Shalat Wajib (5 Waktu)?</div>
+        <select id="shalat">
+          <option value="Ya">✅ Lengkap 5 Waktu</option>
+          <option value="Bolong">⚠️ Ada yang bolong</option>
+          <option value="Tidak">❌ Tidak Shalat</option>
+        </select>
+        <input type="text" id="ket_shalat" placeholder="Shalat apa yang tertinggal?">
+      </div>
+
+      <div class="act-group">
+        <div class="act-title">3. Shalat Tarawih?</div>
+        <select id="tarawih">
+          <option value="Ya">✅ Ya, Melaksanakan</option>
+          <option value="Tidak">❌ Tidak</option>
+        </select>
+        <input type="text" id="ket_tarawih" placeholder="Dimana? (Masjid/Rumah)">
+      </div>
+
+      <div class="act-group">
+        <div class="act-title">4. Tadarus Al-Quran?</div>
+        <select id="tadarus">
+          <option value="Ya">✅ Ya, Mengaji</option>
+          <option value="Tidak">❌ Tidak</option>
+        </select>
+        <input type="text" id="ket_tadarus" placeholder="Surat apa / Juz berapa?">
+      </div>
+
+      <div class="act-group">
+        <div class="act-title">5. Bersedekah / Infak?</div>
+        <select id="sedekah">
+          <option value="Ya">✅ Ya, Bersedekah</option>
+          <option value="Tidak">❌ Tidak</option>
+        </select>
+        <input type="text" id="ket_sedekah" placeholder="Bentuk sedekah?">
+      </div>
+
+      <div class="act-group" style="border-left-color: var(--primary);">
+        <label style="margin-top:0;">📸 Foto Dokumentasi Kegiatan</label>
+        <p style="font-size:0.8rem; color:#666; margin:0 0 10px;">Upload 1 foto bukti kegiatan hari ini.</p>
+        <input type="file" id="fotoInput" accept="image/*" capture="environment">
+      </div>
+
+      <button onclick="kirim()" id="btnKirim">🚀 KIRIM LAPORAN</button>
+      
+      <div id="loading">
+        <span style="font-size: 1.5rem;">⏳</span><br>
+        Sedang mengirim data...<br>
+        <small>Mohon jangan tutup halaman ini.</small>
+      </div>
     </div>
-
-    <div class="act-group">
-      <div class="act-title">3. Shalat Tarawih?</div>
-      <select id="tarawih">
-        <option value="Ya">Ya</option>
-        <option value="Tidak">Tidak</option>
-      </select>
-      <input type="text" id="ket_tarawih" placeholder="Ket: Di Masjid/Rumah?">
-    </div>
-
-    <div class="act-group">
-      <div class="act-title">4. Tadarus Al-Quran?</div>
-      <select id="tadarus">
-        <option value="Ya">Ya</option>
-        <option value="Tidak">Tidak</option>
-      </select>
-      <input type="text" id="ket_tadarus" placeholder="Ket: Surat apa / Juz berapa?">
-    </div>
-
-    <div class="act-group">
-      <div class="act-title">5. Bersedekah / Infak?</div>
-      <select id="sedekah">
-        <option value="Ya">Ya</option>
-        <option value="Tidak">Tidak</option>
-      </select>
-      <input type="text" id="ket_sedekah" placeholder="Ket: Bentuk sedekah?">
-    </div>
-
-    <label>📸 Foto Dokumentasi (Salah satu kegiatan)</label>
-    <input type="file" id="fotoInput" accept="image/*" capture="environment">
-    <small style="color:red; display:block; margin-top:5px;">*Foto wajib diisi</small>
-
-    <button onclick="kirim()" id="btnKirim">KIRIM LAPORAN</button>
-    <div id="loading">Mengirim data... Jangan tutup halaman...</div>
+  </div>
+  
+  <div class="footer">
+    &copy; 2026 E-RAMADHAN SMKNB
   </div>
 </div>
 
 <script>
-// GANTI URL INI DENGAN URL DEPLOYMENT APPS SCRIPT (Exec)
+// URL SCRIPT ANDA (Sesuai yang Anda berikan)
 const API_URL = "https://script.google.com/macros/s/AKfycbwR3teEkRtlaNypd2FQecbLrv6Axx0lTXDDPKiDwyF5YUSpXCet6bUrt_EbKxl1ZCo-Cg/exec"; 
 
 let DATA_SISWA = {}; // Menyimpan data lokal
@@ -118,10 +268,16 @@ window.onload = function() {
       DATA_SISWA = res.data;
       const selKelas = document.getElementById('pilihKelas');
       selKelas.innerHTML = '<option value="">-- Pilih Kelas --</option>';
-      Object.keys(DATA_SISWA).forEach(k => {
+      Object.keys(DATA_SISWA).sort().forEach(k => {
         selKelas.innerHTML += `<option value="${k}">${k}</option>`;
       });
-    } else { alert("Gagal mengambil data siswa"); }
+    } else { 
+      document.getElementById('pilihKelas').innerHTML = '<option value="">Gagal Memuat Data</option>';
+      alert("Gagal koneksi ke database."); 
+    }
+  })
+  .catch(e => {
+     document.getElementById('pilihKelas').innerHTML = '<option value="">Gagal Koneksi</option>';
   });
 };
 
@@ -132,12 +288,20 @@ function loadNama() {
   
   if (k && DATA_SISWA[k]) {
     selNama.innerHTML = '<option value="">-- Pilih Nama --</option>';
-    DATA_SISWA[k].forEach(s => {
-      // Value kita simpan username untuk dikirim ke backend
+    // Sort nama siswa sesuai abjad
+    DATA_SISWA[k].sort((a,b) => a.nama.localeCompare(b.nama)).forEach(s => {
       selNama.innerHTML += `<option value="${s.user}" data-nama="${s.nama}">${s.nama}</option>`;
     });
-    document.getElementById('boxNama').classList.remove('hidden');
-    document.getElementById('formIbadah').classList.remove('hidden');
+    
+    // Efek smooth muncul
+    const boxNama = document.getElementById('boxNama');
+    const formIbadah = document.getElementById('formIbadah');
+    
+    boxNama.classList.remove('hidden');
+    boxNama.style.animation = "fadeUp 0.5s";
+    formIbadah.classList.remove('hidden');
+    formIbadah.style.animation = "fadeUp 0.7s";
+    
   } else {
     document.getElementById('boxNama').classList.add('hidden');
     document.getElementById('formIbadah').classList.add('hidden');
@@ -152,21 +316,24 @@ async function kirim() {
   
   const fotoInp = document.getElementById('fotoInput');
   
-  if (!username || !kelas) return alert("Pilih Nama dan Kelas dulu!");
-  if (fotoInp.files.length === 0) return alert("Wajib upload foto bukti!");
+  if (!username || !kelas) return alert("⚠️ Mohon pilih Nama dan Kelas terlebih dahulu!");
+  if (fotoInp.files.length === 0) return alert("⚠️ Wajib upload foto bukti kegiatan!");
+
+  if (!confirm("Apakah data yang Anda isi sudah benar & jujur?")) return;
 
   document.getElementById('btnKirim').disabled = true;
+  document.getElementById('btnKirim').innerText = "Mengirim...";
   document.getElementById('loading').style.display = 'block';
 
   // 1. Ambil GPS
   let lat = '', long = '';
   try {
     const pos = await new Promise((res, rej) => 
-      navigator.geolocation.getCurrentPosition(res, rej, {timeout: 3000})
+      navigator.geolocation.getCurrentPosition(res, rej, {timeout: 4000})
     );
     lat = pos.coords.latitude; 
     long = pos.coords.longitude;
-  } catch(e) { console.log("GPS off"); }
+  } catch(e) { console.log("GPS Timeout/Denied"); }
 
   // 2. Proses Foto
   const reader = new FileReader();
@@ -200,18 +367,23 @@ async function kirim() {
       const req = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
       const res = await req.json();
       if(res.status) {
-        alert("✅ Alhamdulillah, Laporan Terkirim!\nPoin kamu: " + res.poin);
+        alert("✅ Alhamdulillah, Laporan Berhasil Terkirim!\nPoin kamu: " + res.poin);
         location.reload();
       } else {
-        alert("Gagal mengirim: " + res.message);
-        document.getElementById('btnKirim').disabled = false;
+        alert("❌ Gagal mengirim: " + res.message);
+        resetBtn();
       }
     } catch(e) {
-      alert("Error Koneksi.");
-      document.getElementById('btnKirim').disabled = false;
+      alert("❌ Gagal Koneksi internet. Coba lagi.");
+      resetBtn();
     }
-    document.getElementById('loading').style.display = 'none';
   };
+}
+
+function resetBtn() {
+  document.getElementById('btnKirim').disabled = false;
+  document.getElementById('btnKirim').innerText = "🚀 KIRIM LAPORAN";
+  document.getElementById('loading').style.display = 'none';
 }
 </script>
 
