@@ -4,134 +4,350 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>E-RAMADHAN SMKNB</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root { --primary: #065f46; --primary-light: #059669; --accent: #f59e0b; --bg: #f0fdf4; --card: #fff; }
-  body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 0; color: #1f2937; padding-bottom: 50px; }
+  :root { 
+    --primary: #047857; 
+    --primary-dark: #064e3b;
+    --primary-light: #10b981; 
+    --accent: #f59e0b; 
+    --bg: #ecfdf5; 
+    --card: #ffffff; 
+    --text: #1f2937;
+    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  
+  body { 
+    font-family: 'Poppins', sans-serif; 
+    background-color: var(--bg); 
+    background-image: radial-gradient(#d1fae5 1px, transparent 1px);
+    background-size: 20px 20px;
+    margin: 0; 
+    padding: 0; 
+    color: var(--text); 
+    padding-bottom: 80px; 
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
   
   /* HEADER */
-  .header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 30px 20px 40px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 4px 20px rgba(6,95,70,0.2); }
-  .logo { width: 80px; height: 80px; background: white; border-radius: 50%; padding: 5px; margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); object-fit: contain; }
+  .header { 
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
+    color: white; 
+    padding: 40px 20px 50px; 
+    text-align: center; 
+    border-radius: 0 0 40px 40px; 
+    box-shadow: 0 10px 30px rgba(4, 120, 87, 0.3); 
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .logo { 
+    width: 90px; height: 90px; 
+    background: white; 
+    border-radius: 50%; 
+    padding: 5px; 
+    margin-bottom: 15px; 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
+    object-fit: contain; 
+    border: 3px solid rgba(255,255,255,0.2);
+  }
   
   /* CONTAINER */
-  .container { max-width: 500px; margin: -30px auto 0; padding: 0 15px; position: relative; z-index: 2; }
-  .card { background: var(--card); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 15px; animation: fadeUp 0.5s ease-out; }
+  .container { 
+    max-width: 480px; 
+    margin: -40px auto 0; 
+    padding: 0 20px; 
+    position: relative; 
+    z-index: 10; 
+    flex: 1;
+  }
+  
+  .card { 
+    background: var(--card); 
+    padding: 25px 20px; 
+    border-radius: 24px; 
+    box-shadow: var(--shadow); 
+    margin-bottom: 20px; 
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(255,255,255,0.5);
+  }
   
   /* FORM ELEMENTS */
-  label { font-weight: 600; font-size: 0.9rem; display: block; margin: 10px 0 5px; color: var(--primary); }
-  select, input, button { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #e5e7eb; margin-bottom: 10px; box-sizing: border-box; font-family: inherit; }
-  button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(6,95,70,0.3); }
-  button:disabled { background: #ccc; }
-  .act-group { border: 1px solid #f3f4f6; padding: 15px; border-radius: 12px; background: #fff; margin-bottom: 15px; border-left: 4px solid var(--accent); }
+  label { 
+    font-weight: 600; 
+    font-size: 0.85rem; 
+    display: block; 
+    margin: 12px 0 6px; 
+    color: var(--primary); 
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  select, input, button { 
+    width: 100%; 
+    padding: 14px; 
+    border-radius: 12px; 
+    border: 2px solid #e5e7eb; 
+    margin-bottom: 12px; 
+    font-family: inherit; 
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+    background: #f9fafb;
+  }
+  select:focus, input:focus {
+    border-color: var(--primary-light);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+  }
+  
+  button { 
+    background: var(--primary); 
+    color: white; 
+    border: none; 
+    font-weight: 600; 
+    cursor: pointer; 
+    box-shadow: 0 4px 15px rgba(4, 120, 87, 0.4); 
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+  }
+  button:active { transform: scale(0.98); }
+  button:disabled { background: #9ca3af; box-shadow: none; cursor: not-allowed; }
+  
+  .act-group { 
+    border: 1px solid #e5e7eb; 
+    padding: 15px; 
+    border-radius: 16px; 
+    background: #ffffff; 
+    margin-bottom: 15px; 
+    border-left: 5px solid var(--accent);
+    transition: transform 0.2s;
+  }
+  .act-group:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .act-group b { display: block; margin-bottom: 8px; color: var(--text); font-size: 1rem; }
 
   /* GPS STATUS BOX */
   #gps-box {
-    padding: 10px; border-radius: 8px; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; margin-bottom: 15px;
+    padding: 12px 15px; border-radius: 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-weight: 500;
   }
-  .gps-loading { background: #fef3c7; color: #d97706; border: 1px solid #fcd34d; }
-  .gps-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
-  .gps-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+  .gps-loading { background: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
+  .gps-success { background: #ecfdf5; color: #047857; border: 1px solid #6ee7b7; }
+  .gps-error { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
 
   /* ADMIN STYLES */
-  .row-data { padding: 12px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
-  .row-data:hover { background: #f9fafb; }
-  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; justify-content: center; align-items: center; padding: 20px; }
-  .modal-content { background: white; width: 100%; max-width: 400px; max-height: 80vh; overflow-y: auto; border-radius: 15px; padding: 20px; position: relative; }
+  .row-data { 
+    padding: 15px; 
+    border-bottom: 1px solid #f3f4f6; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    cursor: pointer; 
+    transition: 0.2s; 
+  }
+  .row-data:last-child { border-bottom: none; }
+  .row-data:hover { background: #f0fdf4; }
+  
+  /* MODAL */
+  .modal { 
+    position: fixed; inset: 0; 
+    background: rgba(0,0,0,0.6); 
+    backdrop-filter: blur(4px);
+    z-index: 100; display: none; 
+    justify-content: center; align-items: center; 
+    padding: 20px; 
+    animation: fadeIn 0.2s;
+  }
+  .modal-content { 
+    background: white; width: 100%; max-width: 420px; 
+    max-height: 85vh; overflow-y: auto; 
+    border-radius: 24px; padding: 25px; 
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  /* FOOTER DEVELOPER */
+  footer.dev-footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-top: auto;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    background: rgba(255,255,255,0.5);
+  }
+  footer.dev-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+  }
   
   .hidden { display: none; }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <img src="https://raw.githubusercontent.com/smknbojonggambir/E-RAMADHAN-SMKNB/main/LOGO.png" class="logo">
-  <h2 style="margin:0;">E-RAMADHAN SMKNB</h2>
-  <p style="margin:5px 0 0; font-size:0.9rem; opacity:0.9;">Laporan Ibadah & Monitoring Guru</p>
+  <img src="https://raw.githubusercontent.com/smknbojonggambir/E-RAMADHAN-SMKNB/main/LOGO.png" class="logo" alt="Logo SMKN">
+  <h2 style="margin:0; font-weight:700; letter-spacing:1px;">E-RAMADHAN</h2>
+  <p style="margin:5px 0 0; font-size:0.9rem; opacity:0.9; font-weight:300;">SMK NEGERI BOJONGGAMBIR</p>
 </div>
 
 <div class="container">
   
   <div id="panel-siswa">
     <div class="card">
-      <h3 style="text-align:center; color:var(--primary); margin-top:0;">📋 Form Siswa</h3>
-      <label>Kelas</label><select id="pKelas" onchange="loadNama()"><option>Loading...</option></select>
+      <h3 style="text-align:center; color:var(--primary); margin-top:0; display:flex; align-items:center; justify-content:center; gap:8px;">
+        📋 <span>Data Siswa</span>
+      </h3>
+      <label>Pilih Kelas</label>
+      <select id="pKelas" onchange="loadNama()"><option>Loading...</option></select>
+      
       <div id="areaNama" class="hidden">
-        <label>Nama Siswa</label><select id="pNama"><option>Pilih Nama</option></select>
-        <button onclick="bukaForm()" style="margin-top:10px;">MULAI ISI LAPORAN</button>
+        <label>Nama Lengkap</label>
+        <select id="pNama"><option>Pilih Nama</option></select>
+        <button onclick="bukaForm()" style="margin-top:15px;">MULAI ISI LAPORAN</button>
       </div>
     </div>
 
     <div id="formIbadah" class="hidden">
       <div class="card">
+        <h3 style="margin-top:0; color:var(--primary);">📍 Lokasi & Bukti</h3>
         <div id="gps-box" class="gps-loading">
-          <span id="gps-icon">🔄</span> 
+          <span id="gps-icon" style="font-size:1.2rem;">🔄</span> 
           <span id="gps-text">Sedang melacak lokasi kamu...</span>
         </div>
 
-        <div class="act-group"><b>1. Puasa?</b><select id="puasa"><option value="Ya">✅ Ya Full</option><option value="Setengah">🌗 Setengah</option><option value="Tidak">❌ Tidak</option></select><input id="k_puasa" placeholder="Ket..."></div>
-        <div class="act-group"><b>2. Shalat Wajib?</b><select id="shalat"><option value="Ya">✅ Lengkap</option><option value="Bolong">⚠️ Bolong</option><option value="Tidak">❌ Tidak</option></select><input id="k_shalat" placeholder="Ket..."></div>
-        <div class="act-group"><b>3. Tarawih?</b><select id="tarawih"><option value="Ya">✅ Ya</option><option value="Tidak">❌ Tidak</option></select><input id="k_tarawih" placeholder="Ket..."></div>
-        <div class="act-group"><b>4. Tadarus?</b><select id="tadarus"><option value="Ya">✅ Ya</option><option value="Tidak">❌ Tidak</option></select><input id="k_tadarus" placeholder="Ket..."></div>
-        <div class="act-group"><b>5. Sedekah?</b><select id="sedekah"><option value="Ya">✅ Ya</option><option value="Tidak">❌ Tidak</option></select><input id="k_sedekah" placeholder="Ket..."></div>
-        <div class="act-group"><b>📸 Foto Bukti</b><input type="file" id="foto" accept="image/*" capture="environment"></div>
-        <button onclick="kirim()" id="btnKirim">🚀 KIRIM LAPORAN</button>
+        <div class="act-group">
+            <b>1. Puasa Hari Ini?</b>
+            <select id="puasa">
+                <option value="Ya">✅ Ya, Full</option>
+                <option value="Setengah">🌗 Setengah Hari</option>
+                <option value="Tidak">❌ Tidak Puasa</option>
+            </select>
+            <input id="k_puasa" placeholder="Keterangan (Opsional)...">
+        </div>
+        
+        <div class="act-group">
+            <b>2. Shalat Wajib 5 Waktu?</b>
+            <select id="shalat">
+                <option value="Ya">✅ Lengkap</option>
+                <option value="Bolong">⚠️ Ada yang bolong</option>
+                <option value="Tidak">❌ Tidak Shalat</option>
+            </select>
+            <input id="k_shalat" placeholder="Keterangan (Opsional)...">
+        </div>
+
+        <div class="act-group">
+            <b>3. Shalat Tarawih?</b>
+            <select id="tarawih">
+                <option value="Ya">✅ Melaksanakan</option>
+                <option value="Tidak">❌ Tidak</option>
+            </select>
+            <input id="k_tarawih" placeholder="Keterangan (Opsional)...">
+        </div>
+
+        <div class="act-group">
+            <b>4. Tadarus Al-Qur'an?</b>
+            <select id="tadarus">
+                <option value="Ya">✅ Melaksanakan</option>
+                <option value="Tidak">❌ Tidak</option>
+            </select>
+            <input id="k_tadarus" placeholder="Surat / Juz berapa?">
+        </div>
+
+        <div class="act-group">
+            <b>5. Infaq / Sedekah?</b>
+            <select id="sedekah">
+                <option value="Ya">✅ Melaksanakan</option>
+                <option value="Tidak">❌ Tidak</option>
+            </select>
+            <input id="k_sedekah" placeholder="Keterangan...">
+        </div>
+
+        <div class="act-group" style="border-left-color: var(--primary);">
+            <b>📸 Foto Kegiatan (Bukti)</b>
+            <input type="file" id="foto" accept="image/*" capture="environment" style="border: 2px dashed #cbd5e1; padding: 20px; text-align:center;">
+            <small style="color:#666; display:block; margin-top:-5px;">*Wajib ambil foto selfie/kegiatan</small>
+        </div>
+        
+        <button onclick="kirim()" id="btnKirim" style="background:var(--accent); color:#fff; font-size:1.1rem; margin-top:10px;">🚀 KIRIM LAPORAN</button>
       </div>
     </div>
   </div>
 
   <div id="panel-login-admin" class="hidden">
     <div class="card" style="text-align:center;">
-      <h3>🔐 Login Guru</h3>
+      <div style="font-size:3rem; margin-bottom:10px;">🔐</div>
+      <h3 style="margin:0 0 20px;">Login Guru</h3>
       <input type="password" id="adminPass" placeholder="Masukkan Password Guru">
-      <button onclick="loginAdmin()">MASUK</button>
-      <button onclick="modeSiswa()" style="background:#ddd; color:#333; margin-top:5px;">Kembali ke Siswa</button>
+      <button onclick="loginAdmin()">MASUK DASHBOARD</button>
+      <button onclick="modeSiswa()" style="background:#f3f4f6; color:#4b5563; margin-top:10px; box-shadow:none;">&larr; Kembali ke Siswa</button>
     </div>
   </div>
 
   <div id="dashboard-admin" class="hidden">
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h3 style="margin:0;">👨‍🏫 Dashboard</h3>
-        <button onclick="location.reload()" style="width:auto; padding:5px 10px; font-size:0.8rem; background:#ef4444;">Logout</button>
+        <h3 style="margin:0; display:flex; align-items:center; gap:5px;">👨‍🏫 Dashboard</h3>
+        <button onclick="location.reload()" style="width:auto; padding:8px 15px; font-size:0.8rem; background:#ef4444; margin:0;">Logout</button>
       </div>
-      <hr>
+      <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+      
       <label>Tanggal Laporan:</label>
       <input type="date" id="admDate" onchange="loadRekap()">
+      
       <label>Filter Kelas:</label>
       <select id="admKelas" onchange="loadRekap()">
         <option value="Semua">Semua Kelas</option>
       </select>
-      <div style="background:#e0f2f1; padding:10px; border-radius:8px; font-size:0.9rem; margin-bottom:10px;">
-        Total Lapor: <b id="totalLapor">0</b> Siswa
+      
+      <div style="background:#ecfdf5; color:#065f46; padding:15px; border-radius:12px; font-size:0.95rem; margin-bottom:10px; border:1px solid #a7f3d0; text-align:center;">
+        Total Lapor: <b id="totalLapor" style="font-size:1.2rem;">0</b> Siswa
       </div>
     </div>
 
-    <div class="card" style="padding:0;">
+    <div class="card" style="padding:0; overflow:hidden;">
       <div id="list-rekap">
-        <div style="padding:20px; text-align:center; color:#999;">Pilih Tanggal untuk melihat data.</div>
+        <div style="padding:30px; text-align:center; color:#9ca3af;">
+            <p>Pilih Tanggal untuk melihat data.</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <div style="text-align:center; margin-top:30px;">
-    <span onclick="modeAdmin()" style="font-size:0.8rem; color:#ccc; cursor:pointer;">Login Guru / Admin</span>
+  <div style="text-align:center; margin-top:20px; margin-bottom: 20px;">
+    <span onclick="modeAdmin()" style="font-size:0.85rem; color:#9ca3af; cursor:pointer; text-decoration:underline;">Login Guru / Admin</span>
   </div>
 
 </div>
 
+<footer class="dev-footer">
+    Developer Program <b>Kang Ruli</b> &lt;<a href="https://www.kangruli.web.id" target="_blank">www.kangruli.web.id</a>&gt;
+</footer>
+
 <div id="modalDetail" class="modal">
   <div class="modal-content">
-    <h3 id="mNama" style="margin-top:0; color:var(--primary);">Nama Siswa</h3>
-    <p id="mKelas" style="color:#666; margin-bottom:15px;"></p>
-    <div id="mBody"></div>
-    <div style="margin-top:15px; display:flex; gap:5px; flex-wrap:wrap;">
-      <a id="mFoto" href="#" target="_blank" style="text-decoration:none; color:white; background:#f59e0b; padding:8px 12px; border-radius:20px; font-size:0.8rem; flex:1; text-align:center;">📸 Lihat Foto</a>
-      
-      <a id="mMap" href="#" target="_blank" style="text-decoration:none; color:white; background:#3b82f6; padding:8px 12px; border-radius:20px; font-size:0.8rem; flex:1; text-align:center;">🗺️ Lihat Peta</a>
-      
-      <button onclick="document.getElementById('modalDetail').style.display='none'" style="width:auto; background:#ddd; color:#333; padding:8px 12px; border-radius:20px; font-size:0.8rem;">Tutup</button>
+    <div style="text-align:center; margin-bottom:15px;">
+        <h3 id="mNama" style="margin:0; color:var(--primary); font-size:1.4rem;">Nama Siswa</h3>
+        <span id="mKelas" style="background:#f3f4f6; padding:4px 12px; border-radius:15px; font-size:0.8rem; color:#666;">Kelas</span>
     </div>
+    
+    <div id="mBody" style="background:#fafafa; padding:15px; border-radius:15px; border:1px solid #eee;"></div>
+    
+    <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+      <a id="mFoto" href="#" target="_blank" style="text-decoration:none; color:white; background:var(--accent); padding:10px; border-radius:10px; font-size:0.9rem; flex:1; text-align:center; font-weight:600; box-shadow:0 4px 6px rgba(245, 158, 11, 0.3);">📸 Lihat Foto</a>
+      
+      <a id="mMap" href="#" target="_blank" style="text-decoration:none; color:white; background:#3b82f6; padding:10px; border-radius:10px; font-size:0.9rem; flex:1; text-align:center; font-weight:600; box-shadow:0 4px 6px rgba(59, 130, 246, 0.3);">🗺️ Lihat Peta</a>
+    </div>
+    <button onclick="document.getElementById('modalDetail').style.display='none'" style="width:100%; background:#e5e7eb; color:#374151; padding:12px; border-radius:10px; font-size:0.9rem; margin-top:10px; box-shadow:none;">Tutup</button>
   </div>
 </div>
 
@@ -167,10 +383,12 @@ window.onload = function() {
 function modeAdmin() {
   document.getElementById('panel-siswa').classList.add('hidden');
   document.getElementById('panel-login-admin').classList.remove('hidden');
+  window.scrollTo(0,0);
 }
 function modeSiswa() {
   document.getElementById('panel-login-admin').classList.add('hidden');
   document.getElementById('panel-siswa').classList.remove('hidden');
+  window.scrollTo(0,0);
 }
 
 // === SISWA LOGIC ===
@@ -188,7 +406,8 @@ function loadNama() {
 
 function bukaForm(){ 
   document.getElementById('formIbadah').classList.remove('hidden'); 
-  cariLokasi(); // Cari GPS saat form dibuka
+  document.getElementById('formIbadah').scrollIntoView({behavior: "smooth"});
+  cariLokasi(); 
 }
 
 function cariLokasi() {
@@ -202,12 +421,12 @@ function cariLokasi() {
         USER_LAT = pos.coords.latitude;
         USER_LONG = pos.coords.longitude;
         box.className = 'gps-success';
-        txt.innerText = "Lokasi Terkunci: " + USER_LAT.toFixed(4) + ", " + USER_LONG.toFixed(4);
+        txt.innerText = "Lokasi: " + USER_LAT.toFixed(4) + ", " + USER_LONG.toFixed(4);
         icn.innerText = "✅";
       },
       (err) => {
         box.className = 'gps-error';
-        txt.innerText = "Gagal Deteksi Lokasi (Aktifkan GPS Browser!)";
+        txt.innerText = "Gagal Deteksi Lokasi (Izinkan GPS!)";
         icn.innerText = "❌";
         USER_LAT = "Error"; USER_LONG = "Error";
       },
@@ -222,11 +441,12 @@ function cariLokasi() {
 
 async function kirim() {
   const f = document.getElementById('foto');
-  if(f.files.length === 0) return alert("Wajib foto!");
-  if(!confirm("Kirim Laporan?")) return;
+  if(f.files.length === 0) return alert("Wajib lampirkan foto bukti!");
+  if(!confirm("Apakah data sudah benar? Kirim Laporan?")) return;
   
   const btn = document.getElementById('btnKirim');
-  btn.innerText = "Mengirim..."; btn.disabled = true;
+  const txtAwal = btn.innerText;
+  btn.innerText = "Mengirim Data..."; btn.disabled = true;
 
   const r = new FileReader();
   r.readAsDataURL(f.files[0]);
@@ -237,17 +457,27 @@ async function kirim() {
       nama: document.querySelector('#pNama option:checked').getAttribute('data-n'),
       kelas: document.getElementById('pKelas').value,
       foto: r.result, 
-      lat: USER_LAT, long: USER_LONG, // Kirim Lat Long yg sudah didapat
+      lat: USER_LAT, long: USER_LONG,
       puasa: document.getElementById('puasa').value, ket_puasa: document.getElementById('k_puasa').value,
       shalat: document.getElementById('shalat').value, ket_shalat: document.getElementById('k_shalat').value,
       tarawih: document.getElementById('tarawih').value, ket_tarawih: document.getElementById('k_tarawih').value,
       tadarus: document.getElementById('tadarus').value, ket_tadarus: document.getElementById('k_tadarus').value,
       sedekah: document.getElementById('sedekah').value, ket_sedekah: document.getElementById('k_sedekah').value,
     };
-    const req = await fetch(API, {method:'POST', body:JSON.stringify(d)});
-    const res = await req.json();
-    if(res.status) { alert("Berhasil! Poin: "+res.poin); location.reload(); }
-    else { alert("Gagal"); btn.disabled=false; btn.innerText="Kirim Ulang"; }
+    try {
+        const req = await fetch(API, {method:'POST', body:JSON.stringify(d)});
+        const res = await req.json();
+        if(res.status) { 
+            alert("✅ Laporan Berhasil Dikirim! Poin kamu: "+res.poin); 
+            location.reload(); 
+        } else { 
+            throw new Error("Respon server gagal"); 
+        }
+    } catch (e) {
+        alert("❌ Gagal mengirim. Coba lagi.");
+        btn.disabled=false; 
+        btn.innerText = txtAwal;
+    }
   }
 }
 
@@ -255,69 +485,83 @@ async function kirim() {
 async function loginAdmin() {
   const p = document.getElementById('adminPass').value;
   const btn = document.querySelector('#panel-login-admin button');
-  btn.innerText = "Cek...";
-  const r = await fetch(API, {method:'POST', body:JSON.stringify({action:'login_admin', pass:p})});
-  const res = await r.json();
+  const txtAwal = btn.innerText;
   
-  if(res.status) {
-    document.getElementById('panel-login-admin').classList.add('hidden');
-    document.getElementById('dashboard-admin').classList.remove('hidden');
-    loadRekap();
-  } else {
-    alert("Password Salah!");
-    btn.innerText = "MASUK";
+  btn.innerText = "Memeriksa..."; btn.disabled = true;
+  
+  try {
+      const r = await fetch(API, {method:'POST', body:JSON.stringify({action:'login_admin', pass:p})});
+      const res = await r.json();
+      
+      if(res.status) {
+        document.getElementById('panel-login-admin').classList.add('hidden');
+        document.getElementById('dashboard-admin').classList.remove('hidden');
+        loadRekap();
+      } else {
+        alert("Password Salah!");
+      }
+  } catch(e) {
+      alert("Koneksi Error");
   }
+  btn.innerText = txtAwal; btn.disabled = false;
 }
 
 async function loadRekap() {
   const tgl = document.getElementById('admDate').value;
   const kls = document.getElementById('admKelas').value;
   const list = document.getElementById('list-rekap');
-  list.innerHTML = '<p style="text-align:center; padding:20px;">Memuat data...</p>';
+  list.innerHTML = '<div style="text-align:center; padding:30px;"><div class="gps-loading" style="display:inline-block; padding:10px 20px; border-radius:20px;">⏳ Mengambil data...</div></div>';
   
-  const r = await fetch(API, {method:'POST', body:JSON.stringify({action:'get_rekap', tanggal:tgl, kelas:kls})});
-  const res = await r.json();
-  
-  list.innerHTML = '';
-  document.getElementById('totalLapor').innerText = res.data.length;
-  
-  if(res.data.length === 0) {
-    list.innerHTML = '<p style="text-align:center; padding:20px;">Belum ada laporan masuk.</p>';
-    return;
-  }
+  try {
+      const r = await fetch(API, {method:'POST', body:JSON.stringify({action:'get_rekap', tanggal:tgl, kelas:kls})});
+      const res = await r.json();
+      
+      list.innerHTML = '';
+      document.getElementById('totalLapor').innerText = res.data.length;
+      
+      if(res.data.length === 0) {
+        list.innerHTML = '<div style="text-align:center; padding:40px; color:#999;">📭 Belum ada laporan masuk pada tanggal ini.</div>';
+        return;
+      }
 
-  res.data.forEach(d => {
-    // Simpan LatLong di objek dataset agar mudah diambil
-    const raw = JSON.stringify(d).replace(/"/g, '&quot;');
-    list.innerHTML += `
-      <div class="row-data" onclick="bukaDetail('${raw}')">
-        <div>
-          <div style="font-weight:bold;">${d.nama}</div>
-          <div style="font-size:0.8rem; color:#666;">${d.kelas} | ${d.waktu.split(' ')[1]}</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="color:var(--primary); font-weight:bold;">${d.poin} Poin</div>
-          <div style="font-size:0.7rem;">${d.foto.length > 5 ? '📸 Ada Foto' : '❌ No Foto'}</div>
-        </div>
-      </div>
-    `;
-  });
+      res.data.forEach(d => {
+        const raw = JSON.stringify(d).replace(/"/g, '"');
+        list.innerHTML += `
+          <div class="row-data" onclick='bukaDetail(${JSON.stringify(raw)})'>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <div style="background:${d.foto.length>5?'#d1fae5':'#fee2e2'}; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
+                ${d.foto.length>5?'📷':'👤'}
+              </div>
+              <div>
+                <div style="font-weight:bold; color:#1f2937;">${d.nama}</div>
+                <div style="font-size:0.75rem; color:#6b7280;">${d.kelas} • 🕒 ${d.waktu.split(' ')[1]}</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="color:var(--primary); font-weight:bold; font-size:1.1rem;">${d.poin}</div>
+              <div style="font-size:0.7rem; color:#9ca3af;">Poin</div>
+            </div>
+          </div>
+        `;
+      });
+  } catch (e) {
+      list.innerHTML = '<p style="text-align:center; color:red;">Gagal memuat data.</p>';
+  }
 }
 
 function bukaDetail(jsonStr) {
   const obj = JSON.parse(jsonStr); 
-  // Obj format: {waktu, nama, kelas, poin, foto, lat, long, detail:[]}
   const d = obj.detail;
 
   document.getElementById('mNama').innerText = obj.nama;
   document.getElementById('mKelas').innerText = obj.kelas;
   
   let html = `
-    <b>Puasa:</b> ${d[4]} <br><i>"${d[5]||'-'}"</i><hr style="margin:5px 0">
-    <b>Shalat:</b> ${d[6]} <br><i>"${d[7]||'-'}"</i><hr style="margin:5px 0">
-    <b>Tarawih:</b> ${d[8]} <br><i>"${d[9]||'-'}"</i><hr style="margin:5px 0">
-    <b>Tadarus:</b> ${d[10]} <br><i>"${d[11]||'-'}"</i><hr style="margin:5px 0">
-    <b>Sedekah:</b> ${d[12]} <br><i>"${d[13]||'-'}"</i>
+    <div style="margin-bottom:8px"><b>🍽️ Puasa:</b> <span style="float:right">${d[4]}</span><br><small style="color:#666">${d[5]||'-'}</small></div><hr style="border:0; border-top:1px dashed #eee; margin:5px 0;">
+    <div style="margin-bottom:8px"><b>🕌 Shalat:</b> <span style="float:right">${d[6]}</span><br><small style="color:#666">${d[7]||'-'}</small></div><hr style="border:0; border-top:1px dashed #eee; margin:5px 0;">
+    <div style="margin-bottom:8px"><b>📿 Tarawih:</b> <span style="float:right">${d[8]}</span><br><small style="color:#666">${d[9]||'-'}</small></div><hr style="border:0; border-top:1px dashed #eee; margin:5px 0;">
+    <div style="margin-bottom:8px"><b>📖 Tadarus:</b> <span style="float:right">${d[10]}</span><br><small style="color:#666">${d[11]||'-'}</small></div><hr style="border:0; border-top:1px dashed #eee; margin:5px 0;">
+    <div style="margin-bottom:0px"><b>🤝 Sedekah:</b> <span style="float:right">${d[12]}</span><br><small style="color:#666">${d[13]||'-'}</small></div>
   `;
   document.getElementById('mBody').innerHTML = html;
   
@@ -333,6 +577,7 @@ function bukaDetail(jsonStr) {
   // Tombol Maps
   const btnMap = document.getElementById('mMap');
   if(obj.lat && obj.long && obj.lat != '-' && obj.lat != 'Error') {
+    // Fix link map
     btnMap.href = `https://www.google.com/maps?q=${obj.lat},${obj.long}`;
     btnMap.style.display = 'block';
   } else {
