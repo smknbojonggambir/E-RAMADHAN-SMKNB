@@ -474,7 +474,7 @@ window.onload = function() {
     if(res.status) {
       DATA_SISWA = res.data;
       const s = document.getElementById('pKelas'), sAdm = document.getElementById('admKelas');
-      s.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+      s.innerHTML = '<option value="">-- Pilih Kelompok --</option>';
       Object.keys(DATA_SISWA).sort().forEach(k => {
         s.innerHTML += `<option value="${k}">${k}</option>`;
         sAdm.innerHTML += `<option value="${k}">${k}</option>`;
