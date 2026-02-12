@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body{
+  font-family:Arial;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+.card{
+  background:white;
+  color:black;
+  padding:20px;
+  border-radius:15px;
+  width:350px;
+  margin:auto;
+}
+button{
+  padding:10px;
+  width:100%;
+  background:#203a43;
+  color:white;
+  border:none;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🌙 E-RAMADHAN SMKNB ULTIMATE</h2>
+
+<div class="card" id="loginBox">
+<input id="u" placeholder="Username"><br><br>
+<input id="p" type="password" placeholder="Password"><br><br>
+<button onclick="login()">Login</button>
+</div>
+
+<div id="app" style="display:none;">
+
+<div class="card">
+<h3>Input Ibadah</h3>
+
+<select id="puasa"><option>Ya</option><option>Tidak</option></select><br><br>
+<select id="shalat"><option>Lengkap</option><option>Tidak Lengkap</option></select><br><br>
+<select id="tarawih"><option>Ya</option><option>Tidak</option></select><br><br>
+<select id="tadarus"><option>Ya</option><option>Tidak</option></select><br><br>
+<select id="sedekah"><option>Ya</option><option>Tidak</option></select><br><br>
+
+<video id="video" width="100%" autoplay></video>
+<button onclick="ambilFoto()">Ambil Foto</button>
+<canvas id="canvas" style="display:none;"></canvas>
+<img id="preview" width="100%"><br><br>
+
+<button onclick="simpan()">Simpan</button>
+</div>
+
+<div class="card" id="dashboard" style="display:none;">
+<h3>📊 Ranking</h3>
+<canvas id="chart"></canvas>
+</div>
+
+</div>
+
+<script>
+let user={}, foto="", lat="", long="";
+
+navigator.mediaDevices.getUserMedia({video:true})
+.then(s=>video.srcObject=s);
+
+navigator.geolocation.getCurrentPosition(pos=>{
+  lat=pos.coords.latitude;
+  long=pos.coords.longitude;
+});
+
+function login(){
+  google.script.run.withSuccessHandler(r=>{
+    if(r.status){
+      user=r;
+      document.getElementById("loginBox").style.display="none";
+      document.getElementById("app").style.display="block";
+
+      if(r.role=="admin"){
+        document.getElementById("dashboard").style.display="block";
+        loadChart();
+      }
+    } else alert("Login gagal");
+  }).loginUser(u.value,p.value);
+}
+
+function ambilFoto(){
+  canvas.width=video.videoWidth;
+  canvas.height=video.videoHeight;
+  let ctx=canvas.getContext("2d");
+  ctx.drawImage(video,0,0);
+  ctx.fillStyle="white";
+  ctx.fillText(user.nama+" "+new Date().toLocaleString(),10,20);
+  foto=canvas.toDataURL("image/png");
+  preview.src=foto;
+}
+
+function simpan(){
+  google.script.run.withSuccessHandler(res=>{
+    if(res=="SUDAH") alert("Sudah input hari ini");
+    else alert("Berhasil");
+  }).simpanIbadah({
+    username:user.nama,
+    nama:user.nama,
+    kelas:user.kelas,
+    puasa:puasa.value,
+    shalat:shalat.value,
+    tarawih:tarawih.value,
+    tadarus:tadarus.value,
+    sedekah:sedekah.value,
+    foto:foto,
+    lat:lat,
+    long:long
+  });
+}
+
+function loadChart(){
+  google.script.run.withSuccessHandler(data=>{
+    new Chart(document.getElementById("chart"),{
+      type:"bar",
+      data:{
+        labels:Object.keys(data),
+        datasets:[{data:Object.values(data)}]
+      }
+    });
+  }).getRanking();
+}
+</script>
+
+</body>
+</html>
