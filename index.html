@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<base target="_top">
+<meta charset="UTF-8">
+<title>E-RAMADHAN SMKNB</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 body{
@@ -31,7 +32,7 @@ button{
 
 <body>
 
-<h2>🌙 E-RAMADHAN SMKNB ULTIMATE</h2>
+<h2>🌙 E-RAMADHAN SMKNB</h2>
 
 <div class="card" id="loginBox">
 <input id="u" placeholder="Username"><br><br>
@@ -40,97 +41,79 @@ button{
 </div>
 
 <div id="app" style="display:none;">
-
 <div class="card">
-<h3>Input Ibadah</h3>
-
 <select id="puasa"><option>Ya</option><option>Tidak</option></select><br><br>
 <select id="shalat"><option>Lengkap</option><option>Tidak Lengkap</option></select><br><br>
 <select id="tarawih"><option>Ya</option><option>Tidak</option></select><br><br>
 <select id="tadarus"><option>Ya</option><option>Tidak</option></select><br><br>
 <select id="sedekah"><option>Ya</option><option>Tidak</option></select><br><br>
-
-<video id="video" width="100%" autoplay></video>
-<button onclick="ambilFoto()">Ambil Foto</button>
-<canvas id="canvas" style="display:none;"></canvas>
-<img id="preview" width="100%"><br><br>
-
 <button onclick="simpan()">Simpan</button>
 </div>
 
 <div class="card" id="dashboard" style="display:none;">
-<h3>📊 Ranking</h3>
+<h3>Ranking</h3>
 <canvas id="chart"></canvas>
 </div>
-
 </div>
 
 <script>
-let user={}, foto="", lat="", long="";
+const API_URL = "PASTE_URL_WEBAPP_KAMU";
 
-navigator.mediaDevices.getUserMedia({video:true})
-.then(s=>video.srcObject=s);
+let user={};
 
-navigator.geolocation.getCurrentPosition(pos=>{
-  lat=pos.coords.latitude;
-  long=pos.coords.longitude;
-});
-
-function login(){
-  google.script.run.withSuccessHandler(r=>{
-    if(r.status){
-      user=r;
-      document.getElementById("loginBox").style.display="none";
-      document.getElementById("app").style.display="block";
-
-      if(r.role=="admin"){
-        document.getElementById("dashboard").style.display="block";
-        loadChart();
-      }
-    } else alert("Login gagal");
-  }).loginUser(u.value,p.value);
-}
-
-function ambilFoto(){
-  canvas.width=video.videoWidth;
-  canvas.height=video.videoHeight;
-  let ctx=canvas.getContext("2d");
-  ctx.drawImage(video,0,0);
-  ctx.fillStyle="white";
-  ctx.fillText(user.nama+" "+new Date().toLocaleString(),10,20);
-  foto=canvas.toDataURL("image/png");
-  preview.src=foto;
-}
-
-function simpan(){
-  google.script.run.withSuccessHandler(res=>{
-    if(res=="SUDAH") alert("Sudah input hari ini");
-    else alert("Berhasil");
-  }).simpanIbadah({
-    username:user.nama,
-    nama:user.nama,
-    kelas:user.kelas,
-    puasa:puasa.value,
-    shalat:shalat.value,
-    tarawih:tarawih.value,
-    tadarus:tadarus.value,
-    sedekah:sedekah.value,
-    foto:foto,
-    lat:lat,
-    long:long
+async function login(){
+  const res = await fetch(API_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      action:"login",
+      username:u.value,
+      password:p.value
+    })
   });
+
+  const data = await res.json();
+
+  if(data.status){
+    user=data;
+    loginBox.style.display="none";
+    app.style.display="block";
+    if(data.role=="admin") loadChart();
+  } else alert("Login gagal");
 }
 
-function loadChart(){
-  google.script.run.withSuccessHandler(data=>{
-    new Chart(document.getElementById("chart"),{
-      type:"bar",
-      data:{
-        labels:Object.keys(data),
-        datasets:[{data:Object.values(data)}]
-      }
-    });
-  }).getRanking();
+async function simpan(){
+  await fetch(API_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      action:"simpan",
+      username:user.nama,
+      nama:user.nama,
+      kelas:user.kelas,
+      puasa:puasa.value,
+      shalat:shalat.value,
+      tarawih:tarawih.value,
+      tadarus:tadarus.value,
+      sedekah:sedekah.value
+    })
+  });
+  alert("Berhasil disimpan");
+}
+
+async function loadChart(){
+  const res = await fetch(API_URL,{
+    method:"POST",
+    body:JSON.stringify({action:"ranking"})
+  });
+
+  const data = await res.json();
+
+  new Chart(document.getElementById("chart"),{
+    type:"bar",
+    data:{
+      labels:Object.keys(data),
+      datasets:[{data:Object.values(data)}]
+    }
+  });
 }
 </script>
 
